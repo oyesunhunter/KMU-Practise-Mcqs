@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Lymphatic System — 50 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text)}
+    .wrap{max-width:980px;margin:28px auto;padding:18px}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.25rem}
+    .meta{display:flex;align-items:center;gap:12px;margin:12px 0;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .question{font-size:1.05rem;margin:12px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .option.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .option.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:12px;padding-top:8px;border-top:1px dashed #12202b;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:18px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Lymphatic System — 50 MCQs</h1>
+      <div class="meta">
+        <div id="counter">Question 1 of 50</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"Lymph is formed from:", options:["Blood plasma filtered at glomerulus","Interstitial fluid entering lymphatics","Air in alveoli","Cerebrospinal fluid only"], a:1, exp:"Lymph originates when interstitial fluid enters initial lymphatic capillaries."},
+      {q:"Initial lymphatic capillaries are:", options:["Highly permeable vessels","Thick-walled arteries","Veins with valves only","Nerve fibers"], a:0, exp:"Initial lymphatics have overlapping endothelial cells allowing fluid and macromolecules to enter."},
+      {q:"Lymphatic vessels contain:", options:["Valves to ensure unidirectional flow","No valves","Only smooth muscle without valves","Only capillaries"], a:0, exp:"Collecting lymphatics have valves that prevent backflow and ensure one-way movement."},
+      {q:"Thoracic duct drains lymph from:", options:["Right head and right arm","Most of the body into the left venous angle","Only the liver","Only the lower limb"], a:1, exp:"Thoracic duct returns lymph from most of the body to the left subclavian–internal jugular junction."},
+      {q:"Right lymphatic duct drains lymph from:", options:["Entire body","Right head, right arm and right thorax","Left leg only","Abdomen only"], a:1, exp:"Right lymphatic duct drains the right upper quadrant into the right venous angle."},
+
+      {q:"Lymph nodes are located:", options:["Along lymphatic vessels","Only in the brain","Only inside the heart","Only in bone marrow"], a:0, exp:"Nodes are distributed along collecting vessels and filter lymph from regional territories."},
+      {q:"Primary function of lymph nodes is to:", options:["Filter lymph and support immune activation","Produce red blood cells","Pump lymph actively","Store bile"], a:0, exp:"Nodes trap antigens and allow antigen-presenting cells to activate lymphocytes."},
+      {q:"Afferent lymphatic vessels enter a node at the:", options:["Convex surface","Hilum","Medulla only","Capsule interior"], a:0, exp:"Afferent vessels enter the convex surface; efferent exit at the hilum."},
+      {q:"Germinal centers in nodes are rich in:", options:["T cells","B cells undergoing proliferation","Red blood cells","Endothelial cells"], a:1, exp:"Germinal centers are sites of B‑cell proliferation and affinity maturation."},
+      {q:"Paracortex of a lymph node is primarily:", options:["B-cell follicles","T-cell zone with high endothelial venules","Fatty tissue","Bone marrow"], a:1, exp:"Paracortex contains T cells and HEVs for lymphocyte entry from blood."},
+
+      {q:"Medullary cords contain:", options:["Plasma cells and macrophages","Only smooth muscle","Only collagen","Neurons"], a:0, exp:"Medullary cords house plasma cells that secrete antibodies and macrophages."},
+      {q:"Lymph node sinuses are important for:", options:["Rapid blood flow","Slowing lymph and allowing macrophage filtration","Gas exchange","Hormone secretion"], a:1, exp:"Sinuses slow lymph flow so macrophages can remove debris and pathogens."},
+      {q:"Lymph drains into the bloodstream at the:", options:["Aortic arch","Venous angles (subclavian–jugular junctions)","Pulmonary veins","Hepatic portal vein"], a:1, exp:"Thoracic and right lymphatic ducts empty into the venous angles."},
+      {q:"Chyle is:", options:["Protein-free fluid","Lipid-rich lymph from intestinal lacteals","A type of lymph node","A nerve plexus"], a:1, exp:"Chyle contains absorbed dietary fats (chylomicrons) from the gut."},
+      {q:"Lymph composition includes:", options:["Water, electrolytes, proteins, lipids, lymphocytes","Only red blood cells","Only platelets","Only glucose"], a:0, exp:"Lymph carries fluid, proteins, immune cells and sometimes lipids."},
+
+      {q:"Lymph formation increases when capillary hydrostatic pressure:", options:["Decreases","Increases, promoting filtration into interstitium","Is zero","Is negative"], a:1, exp:"Higher capillary hydrostatic pressure pushes more fluid into interstitium, increasing lymph formation."},
+      {q:"Starling forces govern:", options:["Cardiac conduction","Fluid exchange across capillaries","Bone remodeling","Neural transmission"], a:1, exp:"Hydrostatic and oncotic pressures determine filtration and absorption at capillaries."},
+      {q:"Oncotic pressure is mainly due to:", options:["Plasma proteins (albumin)","Red blood cells","Oxygen tension","Glucose concentration"], a:0, exp:"Plasma proteins create oncotic pressure that pulls fluid into capillaries."},
+      {q:"Lymphatic capillaries have endothelial cells that:", options:["Overlap to form one-way valves","Are tightly joined with no gaps","Are multi-layered","Contain smooth muscle"], a:0, exp:"Overlapping endothelial flaps permit entry of fluid and cells but prevent backflow."},
+      {q:"Lymphatic vessels are absent in:", options:["Skin","Bone marrow and CNS parenchyma (classic teaching)","Intestine","Spleen"], a:1, exp:"Historically, CNS parenchyma lacks classic lymphatics; bone marrow also has limited lymphatics."},
+
+      {q:"Lymph flow is propelled by:", options:["Only the heart","Skeletal muscle pump, respiration, vessel contractility and valves","Active pumping by lymph nodes","Only gravity"], a:1, exp:"Multiple extrinsic and intrinsic mechanisms move lymph toward the venous system."},
+      {q:"Valves in lymphatics prevent:", options:["Forward flow","Backflow of lymph","Exchange of gases","Protein loss"], a:1, exp:"Valves ensure unidirectional lymph movement."},
+      {q:"Lymphangitis refers to:", options:["Inflammation of lymph nodes","Inflammation of lymphatic vessels","Blockage of veins","Infection of arteries"], a:1, exp:"Lymphangitis is inflammation of lymphatic channels, often from infection."},
+      {q:"Lymphadenopathy means:", options:["Enlarged lymph nodes","Absence of lymph nodes","Excessive lymph flow","Blocked arteries"], a:0, exp:"Lymphadenopathy denotes swollen or enlarged lymph nodes due to infection, inflammation or malignancy."},
+      {q:"Lymphedema results from:", options:["Excessive lymph drainage","Lymphatic obstruction or insufficiency causing fluid accumulation","Increased venous return","Hyperactive lymph nodes"], a:1, exp:"Obstruction or damage to lymphatics causes protein-rich interstitial edema (lymphedema)."}, 
+
+      {q:"Primary (congenital) lymphedema can be due to:", options:["Milroy disease and developmental defects","Only infection","Only trauma","Only cancer"], a:0, exp:"Congenital malformations of lymphatics (e.g., Milroy) cause primary lymphedema."},
+      {q:"Secondary lymphedema commonly follows:", options:["Surgery, radiation, infection (filariasis) or malignancy","Only genetic mutation","Only exercise","Only aging"], a:0, exp:"Damage or obstruction from surgery, radiation, parasites or tumors causes secondary lymphedema."},
+      {q:"Sentinel lymph node biopsy is used to:", options:["Map tumor drainage and detect metastasis","Measure lymph flow rate","Replace damaged nodes","Treat lymphedema"], a:0, exp:"Sentinel node biopsy identifies first draining node to assess cancer spread."},
+      {q:"High endothelial venules (HEVs) in nodes allow:", options:["Lymph to enter blood","Lymphocytes to enter nodes from blood","Red cells to enter nodes","Only fluid exchange"], a:1, exp:"HEVs permit naive lymphocytes to migrate from blood into lymph node paracortex."},
+      {q:"Macrophages in lymph node sinuses function to:", options:["Secrete antibodies","Phagocytose debris and pathogens in lymph","Produce lymph","Generate electrical impulses"], a:1, exp:"Sinus macrophages remove particulate matter and microbes from lymph."},
+
+      {q:"Spleen is primarily involved in:", options:["Filtering lymph","Filtering blood and immune responses to blood-borne antigens","Lymph formation","Gas exchange"], a:1, exp:"Spleen filters blood, removes old RBCs and mounts immune responses to blood antigens."},
+      {q:"Peyer’s patches are located in the:", options:["Ileum of small intestine","Liver","Spleen","Lungs"], a:0, exp:"Peyer’s patches are aggregated lymphoid follicles in the ileum important for mucosal immunity."},
+      {q:"Tonsils are part of:", options:["Mucosa-associated lymphoid tissue (MALT)","Central nervous system","Bone marrow","Adipose tissue"], a:0, exp:"Tonsils are MALT structures that sample inhaled/ingested antigens."},
+      {q:"Lymph transports absorbed dietary fats via:", options:["Hepatic portal vein","Intestinal lacteals into thoracic duct as chyle","Directly into arteries","Directly into capillaries"], a:1, exp:"Lacteals absorb chylomicrons which enter lymph and reach circulation via the thoracic duct."},
+      {q:"Lymphocytes in lymph are mainly:", options:["Neutrophils","Lymphocytes (T and B cells) and some macrophages","Erythrocytes","Platelets"], a:1, exp:"Lymph carries immune cells, predominantly lymphocytes."},
+
+      {q:"Lymph composition varies by site and time (True/False):", options:["True","False","Only in disease","Only with exercise"], a:0, exp:"Lymph composition depends on tissue source (e.g., chyle vs interstitial lymph) and physiologic state."},
+      {q:"Lymphatic imaging commonly uses:", options:["Lymphoscintigraphy with radiotracer","X-ray only","ECG","Ultrasound of heart"], a:0, exp:"Lymphoscintigraphy visualizes lymphatic drainage; ultrasound and MRI can also be used."},
+      {q:"Lymphatic vessels often run parallel to:", options:["Arteries only","Veins","Nerves only","Bone"], a:1, exp:"Lymphatics commonly accompany veins and arteries in connective tissue sheaths."},
+      {q:"Lymphatic endothelial cells express markers such as:", options:["CD31 and podoplanin (D2-40) among others","Hemoglobin","Myosin only","Insulin"], a:0, exp:"Lymphatic endothelia have characteristic markers used in histology and research."},
+      {q:"Lymphatic regeneration after injury is:", options:["Impossible","Possible; vessels can regrow but may be incomplete","Instantaneous","Only in embryos"], a:1, exp:"Lymphangiogenesis can occur, but functional recovery may be limited."},
+
+      {q:"Tumor metastasis via lymphatics is:", options:["A common route for regional spread","Impossible","Only occurs in leukemia","Only occurs in bone tumors"], a:0, exp:"Many solid tumors spread first to regional lymph nodes via lymphatics."},
+      {q:"Palpable lymph nodes are usually:", options:["Normal in all adults","Enlarged due to infection, inflammation or malignancy","Always malignant","Always painful"], a:1, exp:"Enlarged nodes may be reactive or malignant; clinical context matters."},
+      {q:"Lymphatic obstruction leads to accumulation of:", options:["Protein-rich interstitial fluid (lymphedema)","Only water without protein","Only air","Only red cells"], a:0, exp:"Obstructed lymphatics cause protein-rich edema that is slow to resolve."},
+      {q:"Lymphatic vessels return excess interstitial proteins to:", options:["Arterial circulation","Venous circulation","Liver directly","Lungs"], a:1, exp:"Lymph returns proteins and fluid to the venous system, maintaining plasma oncotic balance."},
+      {q:"Lymphatic system contributes to immunity by:", options:["Transporting antigens and immune cells to lymphoid organs","Producing insulin","Filtering urine","Generating action potentials"], a:0, exp:"Lymphatics deliver antigens and APCs to nodes where adaptive responses are initiated."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const counter = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const quizCard = document.getElementById('quizCard');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function renderQuestion() {
+      const item = questions[idx];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      explainEl.textContent = item.exp;
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+        label.tabIndex = 0;
+        label.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> ${opt}`;
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          label.querySelector('input').checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if (e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Please select an option before checking.';
+        explainEl.style.display = 'block';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[idx].a;
+      const labels = Array.from(optionsBox.querySelectorAll('.option'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    renderQuestion();
+  </script>
+</body>
+</html>

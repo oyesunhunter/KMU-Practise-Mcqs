@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Blood MCQ Quiz (50 Questions)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fa; color: #333; }
+    .container { max-width: 800px; margin: 40px auto; padding: 20px 24px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    h1 { font-size: 1.6rem; margin-bottom: 12px; }
+    .question { font-size: 1.1rem; margin: 18px 0; }
+    .options { list-style: none; padding: 0; margin: 0; }
+    .option { margin: 8px 0; }
+    .option button { width: 100%; text-align: left; padding: 12px 14px; border: 1px solid #ddd; background: #f8f8f8; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+    .option button:hover { background: #eef0f5; }
+    .feedback { margin-top: 12px; font-weight: bold; }
+    .feedback.correct { color: #0a6e2b; }
+    .feedback.wrong { color: #cc3333; }
+    #nextBtn { margin-top: 14px; padding: 10px 18px; font-size: 1rem; border-radius: 6px; border: 1px solid #4a90e2; background: #4a90e2; color: #fff; cursor: pointer; }
+    #nextBtn[disabled] { opacity: .5; cursor: not-allowed; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 12px; background: #eee; font-size: 12px; margin-left: 8px; }
+    .footer { margin-top: 24px; font-size: 0.9rem; color: #555; }
+    @media (max-width: 620px) {
+      .container { margin: 12px; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Blood MCQ Quiz</h1>
+    <div id="quizArea">
+      <div class="question" id="questionText"></div>
+      <ul class="options" id="optionsList"></ul>
+      <div id="feedback" class="feedback" aria-live="polite" style="display:none"></div>
+      <button id="nextBtn" disabled>Next</button>
+      <div class="footer" id="scoreSummary" style="display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    // 50 questions about Blood
+    const questions = [
+      { q: "1. What are the three main functions of blood?",
+        options: ["Transport, regulation, defense", "Regulate temperature only", "Digestion", "Respiration"],
+        answer: 0
+      },
+      { q: "2. Which component carries oxygen in the blood?",
+        options: ["Plasma", "Red blood cells", "Platelets", "White blood cells"],
+        answer: 1
+      },
+      { q: "3. Which is the most abundant cell type in normal blood?",
+        options: ["Platelets", "White blood cells", "Red blood cells", "Lymphocytes"],
+        answer: 2
+      },
+      { q: "4. What protein within RBCs binds oxygen?",
+        options: ["Myoglobin", "Hemoglobin", "Albumin", "Fibrinogen"],
+        answer: 1
+      },
+      { q: "5. Which organ primarily produces erythropoietin to stimulate RBC production?",
+        options: ["Liver", "Kidneys", "Spleen", "Bone marrow"],
+        answer: 1
+      },
+      { q: "6. Which blood type is the universal donor for ABO system?",
+        options: ["O positive", "O negative", "AB positive", "AB negative"],
+        answer: 1
+      },
+      { q: "7. Which blood type is the universal recipient for ABO system?",
+        options: ["O negative", "AB positive", "AB negative", "O positive"],
+        answer: 1
+      },
+      { q: "8. The Rh factor indicates presence of which antigen?",
+        options: ["D antigen", "A antigen", "B antigen", "C antigen"],
+        answer: 0
+      },
+      { q: "9. Platelets are essential for which process?",
+        options: ["Gas transport", "Defense", "Blood clotting", "Hormone transport"],
+        answer: 2
+      },
+      { q: "10. Which plasma protein helps maintain oncotic pressure?",
+        options: ["Albumin", "Globulin", "Fibrinogen", "Hemoglobin"],
+        answer: 0
+      },
+      { q: "11. Which type of white blood cells are most numerous and primarily fight bacterial infections?",
+        options: ["Neutrophils", "Lymphocytes", "Eosinophils", "Basophils"],
+        answer: 0
+      },
+      { q: "12. Which white blood cells are key in allergic responses and parasitic infections?",
+        options: ["Neutrophils", "Lymphocytes", "Eosinophils", "Monocytes"],
+        answer: 2
+      },
+      { q: "13. Which white blood cells are the main cells of the adaptive immune system?",
+        options: ["Neutrophils", "Lymphocytes", "Eosinophils", "Basophils"],
+        answer: 1
+      },
+      { q: "14. Basophils release which chemical during allergic reactions?",
+        options: ["Histamine", "Dopamine", "Insulin", "Serotonin"],
+        answer: 0
+      },
+      { q: "15. The three phases of hemostasis are?",
+        options: ["Vasodilation, platelet activation, fibrinolysis", "Vasoconstriction, platelet plug formation, coagulation", "Inflammation, healing, scarring", "None of the above"],
+        answer: 1
+      },
+      { q: "16. Which organ synthesizes most clotting factors?",
+        options: ["Heart", "Liver", "Kidney", "Lungs"],
+        answer: 1
+      },
+      { q: "17. Vitamin K is essential for the synthesis of which process?",
+        options: ["Fibrinogen only", "Gamma-carboxylation of several clotting factors", "Breaking clots", "Oxygen transport"],
+        answer: 1
+      },
+      { q: "18. Fibrin is formed from which precursor?",
+        options: ["Fibrinogen", "Fibronectin", "Plasminogen", "Albumin"],
+        answer: 0
+      },
+      { q: "19. Which enzyme dissolves fibrin during clot breakdown?",
+        options: ["Thrombin", "Plasmin", "Fibrinogenase", "Lipase"],
+        answer: 1
+      },
+      { q: "20. The process of blood cell production is called?",
+        options: ["Hematology", "Hematopoiesis", "Leukomatosis", "Anemia"],
+        answer: 1
+      },
+      { q: "21. Where does most adult hematopoiesis occur?",
+        options: ["Yellow bone marrow", "Red bone marrow", "Spleen", "Liver"],
+        answer: 1
+      },
+      { q: "22. Which hormone stimulates red blood cell production?",
+        options: ["Erythropoietin (EPO)", "Insulin", "Estrogen", "Glucagon"],
+        answer: 0
+      },
+      { q: "23. What is the approximate normal adult hematocrit range for males?",
+        options: ["20-30%", "30-40%", "40-54%", "60-70%"],
+        answer: 2
+      },
+      { q: "24. A hematocrit below normal is most consistent with which condition?",
+        options: ["Polycythemia", "Leukocytosis", "Anemia", "Thrombocytosis"],
+        answer: 2
+      },
+      { q: "25. A hematocrit above normal suggests which condition?",
+        options: ["Polycythemia", "Anemia", "Leukopenia", "Thrombocytopenia"],
+        answer: 0
+      },
+      { q: "26. Which component within hemoglobin binds oxygen?",
+        options: ["Ferritin", "Transferrin", "Hemoglobin", "Heme"],
+        answer: 2
+      },
+      { q: "27. Which gas is primarily transported by hemoglobin?",
+        options: ["Oxygen", "Carbon dioxide (majority as bicarbonate in plasma)", "Nitrogen", "Helium"],
+        answer: 0
+      },
+      { q: "28. Platelets are fragments derived from which cell type?",
+        options: ["Neurons", "Megakaryocytes", "Hepatocytes", "Lymphocytes"],
+        answer: 1
+      },
+      { q: "29. The buffy coat in a centrifuged blood sample contains:",
+        options: ["Plasma", "RBCs", "WBCs and platelets", "Platelets only"],
+        answer: 2
+      },
+      { q: "30. Which blood group antigen is lacking in type O individuals?",
+        options: ["A", "B", "A and B", "None of the above"],
+        answer: 2
+      },
+      { q: "31. Which antibody is present in the plasma of type O individuals?",
+        options: ["Anti-A only", "Anti-B only", "Both anti-A and anti-B", "No antibodies"],
+        answer: 2
+      },
+      { q: "32. The Direct Coombs test detects:",
+        options: ["Free antibodies in serum", "Antibodies bound to RBCs", "RBC antigens", "Clotting factors"],
+        answer: 1
+      },
+      { q: "33. Hemophilia A is due to deficiency of:", 
+        options: ["Factor VIII", "Factor IX", "Factor VII", "von Willebrand factor"],
+        answer: 0
+      },
+      { q: "34. Defect in platelet adhesion is characteristic of which disease?",
+        options: ["Hemophilia B", "Von Willebrand disease", "Sickle cell disease", "Iron deficiency anemia"],
+        answer: 1
+      },
+      { q: "35. Sickle cell disease results from substitution of which amino acid in beta-globin?",
+        options: ["Valine for glutamic acid at position 6", "Glutamic acid for valine", "Lysine for arginine", "Phenylalanine for leucine"],
+        answer: 0
+      },
+      { q: "36. Lifespan of a normal red blood cell is about:", 
+        options: ["30 days", "90 days", "120 days", "180 days"],
+        answer: 2
+      },
+      { q: "37. Platelets are fragments produced from which cell type?", 
+        options: ["Neurons", "Megakaryocytes", "Hepatocytes", "Lymphocytes"],
+        answer: 1
+      },
+      { q: "38. Normal platelet count ranges roughly between:",
+        options: ["50k–100k/µL", "150k–450k/µL", "1M/µL", "5k–10k/µL"],
+        answer: 1
+      },
+      { q: "39. Erythropoietin (EPO) levels rise in response to:", 
+        options: ["Hyperoxia", "Hypoxia", "Hyperglycemia", "Hyperlipidemia"],
+        answer: 1
+      },
+      { q: "40. Reticulocyte count is used to assess:", 
+        options: ["Bone marrow RBC production", "Platelet function", "Coagulation factors", "White cell activity"],
+        answer: 0
+      },
+      { q: "41. During fetal development, the liver is a major site of hematopoiesis after the yolk sac. Which is true?",
+        options: ["Spleen is never involved", "Liver is a major site temporarily", "Bone marrow is the only site from early on", "Heart produces RBCs"],
+        answer: 1
+      },
+      { q: "42. What test is used to ensure ABO compatibility prior to transfusion?",
+        options: ["Complete blood count", "Crossmatch", "ESR", "Coombs test"],
+        answer: 1
+      },
+      { q: "43. The universal donor for ABO and Rh is:",
+        options: ["O positive", "O negative", "AB positive", "AB negative"],
+        answer: 1
+      },
+      { q: "44. Fresh frozen plasma is used to replace which components?",
+        options: ["Platelets", "Clotting factors", "Red cells", "Albumin"],
+        answer: 1
+      },
+      { q: "45. Which condition is characterized by macrocytosis due to B12/folate deficiency?",
+        options: ["Iron deficiency anemia", "Pernicious/megaloblastic anemia", "Aplastic anemia", "Sickle cell disease"],
+        answer: 1
+      },
+      { q: "46. The buffy coat is primarily composed of:",
+        options: ["RBCs", "WBCs and platelets", "Plasma proteins", "Fibrinogen"],
+        answer: 1
+      },
+      { q: "47. The most common inherited bleeding disorder worldwide is:",
+        options: ["Hemophilia A", "Von Willebrand disease", "Hemophilia B", "Factor XI deficiency"],
+        answer: 1
+      },
+      { q: "48. An elevated erythrocyte sedimentation rate (ESR) most often indicates:",
+        options: ["Infection or inflammation", "Dehydration only", "Low protein intake", "Low erythropoietin"],
+        answer: 0
+      },
+      { q: "49. What is the normal hemoglobin concentration range for an adult male (approx)?",
+        options: ["12–14 g/dL", "13–17 g/dL", "18–22 g/dL", "8–12 g/dL"],
+        answer: 1
+      },
+      { q: "50. A characteristic abnormal red blood cell shape seen in sickle cell disease is:",
+        options: ["Spherocyte", "Target cell", "Sickle (crescent) shape", "Elliptocyte"],
+        answer: 2
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    const questionText = document.getElementById('questionText');
+    const optionsList = document.getElementById('optionsList');
+    const feedback = document.getElementById('feedback');
+    const nextBtn = document.getElementById('nextBtn');
+    const scoreSummary = document.getElementById('scoreSummary');
+
+    function renderQuestion(index) {
+      const q = questions[index];
+      questionText.textContent = q.q;
+      optionsList.innerHTML = '';
+      feedback.style.display = 'none';
+      nextBtn.disabled = true;
+
+      q.options.forEach((opt, i) => {
+        const li = document.createElement('li');
+        li.className = 'option';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = (i + 1) + '. ' + opt;
+        btn.addEventListener('click', () => handleAnswer(i, q.answer, btn, li));
+        li.appendChild(btn);
+        optionsList.appendChild(li);
+      });
+    }
+
+    function handleAnswer(selectedIndex, correctIndex, button, listItem) {
+      // Disable all options
+      Array.from(optionsList.querySelectorAll('button')).forEach(b => b.disabled = true);
+      // Mark correctness
+      const isCorrect = selectedIndex === correctIndex;
+      if (isCorrect) {
+        score++;
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback correct';
+      } else {
+        feedback.textContent = 'Incorrect. Correct answer: ' + (correctIndex + 1) + '.';
+        feedback.className = 'feedback wrong';
+      }
+      feedback.style.display = 'block';
+      nextBtn.disabled = false;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      current++;
+      if (current < questions.length) {
+        renderQuestion(current);
+      } else {
+        // Quiz finished
+        document.getElementById('quizArea').innerHTML = `
+          <h2>Quiz Completed</h2>
+          <p>You scored ${score} out of ${questions.length}.</p>
+          <p>Review the questions or retake the quiz by refreshing the page.</p>
+        `;
+      }
+    });
+
+    // Initialize
+    renderQuestion(current);
+  </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Hearing & Balance Quiz — 35 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#071021; --bg2:#0f1724; --card:#0b1220; --muted:#9ca3af;
+      --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);}
+    .wrap{max-width:980px;margin:28px auto;padding:18px;}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    h1{margin:0;color:var(--primary);font-size:1.5rem;text-align:center}
+    .sub{color:var(--muted);text-align:center;font-size:0.95rem}
+    .card{background:linear-gradient(180deg,#07121a,#0b1220);border:1px solid #16202b;border-radius:12px;padding:16px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .qtext{font-size:1.05rem;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .opt input{margin:0}
+    .opt.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .opt.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .feedback{min-height:26px;margin-top:10px;font-weight:700}
+    .feedback.good{color:var(--accent)}
+    .feedback.bad{color:var(--danger)}
+    .controls{display:flex;gap:10px;margin-top:12px;align-items:center}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8;color:#041021}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .collapse{margin-top:12px;border-top:1px dashed #12202b;padding-top:10px}
+    .coll-title{color:var(--muted);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .coll-body{margin-top:8px;display:none;color:#cbd5e1;line-height:1.4}
+    .score{margin-top:14px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;color:var(--muted)}
+    .final{display:none;margin-top:18px;padding:16px;border-radius:10px;background:#071826;border:1px solid #12202b;text-align:center}
+    @media (max-width:520px){.wrap{padding:12px}.qtext{font-size:1rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Hearing & Balance — 35 MCQs</h1>
+      <div class="sub">External, middle, inner ear • Mechanism of hearing • Vestibular balance • One question at a time</div>
+    </header>
+
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 35</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="qtext" id="qText"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // External ear (1-8)
+      {q:"Primary function of the external ear (pinna and canal) is to:", options:["Transduce sound into neural signals","Collect and funnel sound, aid localization","Equalize middle ear pressure","Produce endolymph"], ans:1, exp:"The pinna and external auditory canal collect sound and provide spectral cues for localization."},
+      {q:"The external auditory canal helps protect the tympanic membrane by:", options:["Producing endolymph","Secreting cerumen and providing a narrow canal","Amplifying low frequencies only","Generating action potentials"], ans:1, exp:"Cerumen and canal geometry protect and trap debris; canal also shapes incoming sound."},
+      {q:"Sound localization in the vertical plane is aided by:", options:["Eustachian tube","Pinna shape and spectral filtering","Stapedius reflex","Cochlear place coding"], ans:1, exp:"Pinna shape produces frequency-dependent filtering that helps judge elevation."},
+      {q:"The tympanic membrane separates which two spaces?", options:["External auditory canal and middle ear","Middle ear and inner ear","Cochlea and vestibule","Eustachian tube and nasopharynx"], ans:0, exp:"The tympanic membrane (eardrum) forms the boundary between external canal and middle ear."},
+      {q:"Cerumen (earwax) function includes:", options:["Transducing sound","Lubrication and trapping debris","Producing auditory nerve impulses","Equalizing pressure"], ans:1, exp:"Cerumen lubricates the canal and traps dust and microbes."},
+      {q:"The external ear contributes to which frequency-dependent effect?", options:["Impedance matching","Spectral shaping of incoming sound","Hair cell transduction","Endolymph production"], ans:1, exp:"The external ear shapes the spectrum of sound reaching the tympanic membrane."},
+      {q:"The concha and tragus are parts of the:", options:["Middle ear","External ear (auricle/pinna)","Inner ear","Eustachian tube"], ans:1, exp:"Concha and tragus are anatomical parts of the auricle/pinna."},
+      {q:"Ear canal resonance typically amplifies which frequency range important for speech?", options:["Below 100 Hz","~2–4 kHz","10–20 kHz","Ultrasound only"], ans:1, exp:"The external canal resonance boosts frequencies around 2–4 kHz, important for speech intelligibility."},
+
+      // Middle ear (9-16)
+      {q:"Main role of the ossicular chain (malleus-incus-stapes) is to:", options:["Transduce electrical signals","Match impedance between air and cochlear fluids","Produce endolymph","Detect head rotation"], ans:1, exp:"Ossicles provide impedance matching and amplify pressure at the oval window."},
+      {q:"The area difference between tympanic membrane and stapes footplate increases pressure at the oval window by:", options:["Reducing pressure","Amplifying pressure (area ratio)","Producing sound","Generating CSF"], ans:1, exp:"Smaller stapes footplate area concentrates force, increasing pressure transmitted into cochlea."},
+      {q:"The Eustachian tube connects the middle ear to the:", options:["External auditory canal","Nasopharynx","Cochlea","Mastoid air cells only"], ans:1, exp:"Eustachian tube equalizes middle ear pressure with ambient pressure via nasopharynx."},
+      {q:"The acoustic (stapedius) reflex protects the inner ear by:", options:["Opening the oval window","Contracting middle ear muscles to reduce ossicular motion","Increasing endolymph volume","Closing the Eustachian tube"], ans:1, exp:"Stapedius and tensor tympani contract to stiffen ossicular chain and attenuate loud sounds."},
+      {q:"Otitis media is an infection of the:", options:["External ear canal","Middle ear","Inner ear","Eustachian tube only"], ans:1, exp:"Otitis media affects the middle ear cavity, often with fluid and infection behind the tympanic membrane."},
+      {q:"The tympanic membrane vibrates in response to sound; which structure transmits those vibrations next?", options:["Oval window","Ossicles (malleus first)","Round window","Cochlear duct"], ans:1, exp:"Tympanic membrane movement is transmitted to the malleus, then incus and stapes."},
+      {q:"Middle ear pressure equalization is important because:", options:["It prevents cochlear hair cell damage","It allows efficient tympanic membrane vibration","It produces endolymph","It controls pupil size"], ans:1, exp:"Equal pressure ensures the tympanic membrane can vibrate freely for sound transmission."},
+      {q:"The stapedius muscle attaches to the:", options:["Malleus","Incus","Stapes","Tympanic membrane"], ans:2, exp:"Stapedius inserts on the stapes and dampens its motion when contracted."},
+
+      // Inner ear & cochlea (17-24)
+      {q:"Endolymph is found in which cochlear compartment?", options:["Scala tympani","Scala vestibuli","Scala media (cochlear duct)","Middle ear cavity"], ans:2, exp:"Endolymph fills the scala media (cochlear duct) and has high K+ concentration."},
+      {q:"Perilymph is located in:", options:["Scala media only","Scala vestibuli and scala tympani","Middle ear","Eustachian tube"], ans:1, exp:"Perilymph fills scala vestibuli and scala tympani and resembles extracellular fluid."},
+      {q:"The basilar membrane vibrates in response to sound and produces a traveling wave; high frequencies peak at the:", options:["Apex","Base","Middle only","Round window"], ans:1, exp:"High-frequency sounds peak near the base of the cochlea; low frequencies near the apex."},
+      {q:"Inner hair cells primarily:", options:["Provide structural support","Transduce mechanical motion into receptor potentials and release neurotransmitter","Produce endolymph","Form the tectorial membrane"], ans:1, exp:"Inner hair cells convert basilar membrane motion into neurotransmitter release onto auditory nerve fibers."},
+      {q:"Outer hair cells contribute to hearing by:", options:["Amplifying and sharpening basilar membrane motion (cochlear amplifier)","Transducing sound into APs","Producing perilymph","Forming ossicles"], ans:0, exp:"Outer hair cells change length to enhance sensitivity and frequency selectivity."},
+      {q:"The tectorial membrane overlies which cells in the organ of Corti?", options:["Inner and outer hair cell stereocilia","Ganglion cells","Ossicles","Vestibular hair cells"], ans:0, exp:"Stereocilia of hair cells interact with the tectorial membrane during sound-induced motion."},
+      {q:"The round window allows:", options:["Pressure relief for fluid movement in cochlea","Direct sound entry","Endolymph production","Eustachian tube drainage"], ans:0, exp:"Round window bulges to accommodate fluid displacement when the oval window is driven."},
+      {q:"Place coding of frequency in the cochlea is based on:", options:["Uniform stiffness along basilar membrane","Gradients of stiffness and width along basilar membrane","Random distribution","Tectorial membrane only"], ans:1, exp:"Basilar membrane mechanical properties vary along its length, producing place coding."},
+
+      // Mechanism of hearing & neural pathway (25-30)
+      {q:"Sound-induced basilar membrane motion leads to opening of mechanoelectrical channels in hair cell stereocilia causing:", options:["Action potentials in hair cells","Receptor potentials (graded) and neurotransmitter release","Immediate muscle contraction","Endolymph secretion"], ans:1, exp:"Hair cells generate graded receptor potentials that modulate neurotransmitter release onto afferents."},
+      {q:"Auditory nerve fibers are the axons of:", options:["Inner hair cells","Outer hair cells","Spiral ganglion neurons (postsynaptic to hair cells)","Cochlear nucleus neurons"], ans:2, exp:"Spiral ganglion neurons receive input from hair cells and form the auditory (cochlear) nerve."},
+      {q:"First central synapse of auditory nerve fibers is in the:", options:["Superior olivary complex","Cochlear nucleus in the brainstem","Inferior colliculus","Medial geniculate body"], ans:1, exp:"Auditory nerve fibers synapse in the cochlear nuclei in the brainstem."},
+      {q:"Binaural processing for sound localization begins at the:", options:["Cochlear nucleus only","Superior olivary complex","Auditory cortex only","LGN"], ans:1, exp:"Superior olivary complex compares timing and intensity differences between ears for localization."},
+      {q:"The main thalamic relay for auditory information is the:", options:["Lateral geniculate nucleus","Medial geniculate nucleus (MGN)","Ventral posterolateral nucleus","Pulvinar"], ans:1, exp:"MGN relays auditory signals to primary auditory cortex."},
+      {q:"Primary auditory cortex (A1) is located in the:", options:["Occipital lobe","Temporal lobe (Heschl's gyrus)","Parietal lobe","Frontal lobe"], ans:1, exp:"A1 resides in Heschl's gyrus of the superior temporal plane."},
+
+      // Vestibular system & balance (31-35)
+      {q:"Semicircular canals detect:", options:["Linear acceleration and gravity","Angular acceleration (rotational movements)","Sound frequency","Light intensity"], ans:1, exp:"Semicircular canals sense angular acceleration via endolymph inertia deflecting the cupula."},
+      {q:"Utricle and saccule detect:", options:["Angular acceleration only","Linear acceleration and head tilt relative to gravity","Sound intensity","Eye movements"], ans:1, exp:"Otolith organs (utricle/saccule) sense linear acceleration and static head tilt via otoconia."},
+      {q:"Otoliths (otoconia) are:", options:["Hair cells","Calcium carbonate crystals embedded in otolithic membrane","Endolymph proteins","Middle ear muscles"], ans:1, exp:"Otoconia add mass to the otolithic membrane so gravity/linear acceleration deflects hair bundles."},
+      {q:"Deflection of vestibular hair cell stereocilia toward the kinocilium causes:", options:["Hyperpolarization only","Depolarization and increased afferent firing","No change","Endolymph secretion"], ans:1, exp:"Deflection toward kinocilium opens channels, depolarizing the cell and increasing transmitter release."},
+      {q:"Vestibulo-ocular reflex (VOR) functions to:", options:["Stabilize gaze during head movement by producing compensatory eye movements","Amplify sound","Control pupil size","Produce CSF"], ans:0, exp:"VOR generates eye movements equal and opposite to head rotation to stabilize vision."}
+    ];
+
+    let index = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+    const quizCard = document.getElementById('quizCard');
+
+    function render() {
+      const item = questions[index];
+      qText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = item.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${index+1} of ${questions.length}`;
+      progressBar.style.width = `${(index)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        label.tabIndex = 0;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
+        radio.value = i;
+        radio.style.pointerEvents = 'none';
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          radio.checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if(e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    toggleExplain.addEventListener('click', () => {
+      explain.style.display = explain.style.display === 'block' ? 'none' : 'block';
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[index].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      explain.style.display = 'block';
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index++;
+      if (index >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    function restart() {
+      index = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>

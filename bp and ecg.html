@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Blood Pressure, Cardiac Conduction & ECG — 40 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text);}
+    .wrap{max-width:980px;margin:28px auto;padding:18px;}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.3rem}
+    .meta{display:flex;align-items:center;gap:12px;margin:12px 0;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .question{font-size:1.05rem;margin:12px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .option.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .option.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:12px;padding-top:8px;border-top:1px dashed #12202b;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:18px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Blood Pressure, Conduction System & ECG — 40 MCQs</h1>
+
+      <div class="meta">
+        <div id="counter">Question 1 of 40</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"Define blood pressure (BP). BP is the:", options:["Force of blood on vessel walls (mmHg)","Volume of blood in heart","Heart electrical activity","Blood viscosity"], a:0, exp:"BP is the hydrostatic force exerted by circulating blood on arterial walls, expressed in mmHg."},
+      {q:"Short-term regulation of BP primarily uses:", options:["Renal sodium handling","Baroreceptor reflex and autonomic changes","Bone marrow","Liver metabolism"], a:1, exp:"Baroreceptors and autonomic output rapidly adjust HR, contractility and vascular tone."},
+      {q:"Long-term regulation of BP mainly involves:", options:["Baroreceptors only","Renal control of blood volume (RAAS)","Immediate heart sounds","Skin perfusion"], a:1, exp:"Kidneys regulate blood volume via RAAS, aldosterone and natriuresis to set long-term BP."},
+      {q:"Baroreceptors are located in the:", options:["Carotid sinus and aortic arch","Left ventricle","Liver","Kidney"], a:0, exp:"Carotid sinus and aortic arch baroreceptors sense arterial stretch and modulate autonomic tone."},
+      {q:"RAAS increases BP by:", options:["Vasodilation and natriuresis","Vasoconstriction and sodium/water retention","Decreasing heart rate","Increasing urine output"], a:1, exp:"Renin→angiotensin→aldosterone causes vasoconstriction and sodium retention, raising BP."},
+
+      {q:"ANP (atrial natriuretic peptide) causes:", options:["Natriuresis and vasodilation","Vasoconstriction","Increased renin","Platelet aggregation"], a:0, exp:"ANP promotes sodium excretion and vasodilation, lowering blood volume and BP."},
+      {q:"Short-term neural BP control uses which autonomic change to raise BP?", options:["Increased parasympathetic tone","Increased sympathetic tone","Decreased sympathetic tone","Increased vagal tone"], a:1, exp:"Sympathetic activation raises HR, contractility and arteriolar tone to increase BP."},
+      {q:"Arterioles primarily function as:", options:["Capacitance vessels","Resistance vessels controlling flow","Exchange vessels","Conduction system"], a:1, exp:"Arterioles regulate systemic vascular resistance and distribution of blood flow."},
+      {q:"Capillaries are specialized for:", options:["Exchange of gases and nutrients","High-pressure conduction","Electrical conduction","Hormone synthesis"], a:0, exp:"Capillaries permit exchange between blood and tissues."},
+      {q:"Veins act as:", options:["Resistance vessels","Volume reservoirs (capacitance)","Exchange vessels","Pacemakers"], a:1, exp:"Veins store blood and return it to the heart; they are capacitance vessels."},
+
+      {q:"Blood vessel wall layers from inside out are:", options:["Intima, media, adventitia","Media, intima, adventitia","Adventitia, media, intima","Endocardium, myocardium, epicardium"], a:0, exp:"Intima (endothelium), media (smooth muscle), adventitia (connective tissue)."},
+      {q:"Endothelium functions include:", options:["Modulating tone, thrombosis and permeability","Generating action potentials","Pumping blood","Forming valves"], a:0, exp:"Endothelium releases NO, prostacyclin, and regulates coagulation and permeability."},
+      {q:"Define conduction system of heart (brief). It is the:", options:["Mechanical pump only","Specialized electrical pathway generating and conducting impulses","Vascular network","Lymphatic drainage"], a:1, exp:"Conduction system generates and transmits electrical impulses coordinating contraction."},
+      {q:"Primary pacemaker of the heart is the:", options:["AV node","SA node","Bundle of His","Purkinje fibers"], a:1, exp:"SA node in the right atrium normally sets heart rate by spontaneous depolarization."},
+      {q:"AV node function is to:", options:["Generate fastest impulses","Delay conduction to allow atrial contraction before ventricular systole","Pump blood","Form valves"], a:1, exp:"AV node delays impulse transmission, permitting ventricular filling."},
+
+      {q:"Bundle of His conducts impulses from AV node to:", options:["Atria","Ventricles via bundle branches","Lungs","Kidneys"], a:1, exp:"Bundle of His transmits impulses to right and left bundle branches."},
+      {q:"Purkinje fibers provide:", options:["Slow conduction","Rapid ventricular conduction for coordinated contraction","Hormone release","Valve closure"], a:1, exp:"Purkinje network rapidly distributes impulse to ventricular myocardium."},
+      {q:"Properties of conductive tissue include:", options:["Automaticity, conductivity, excitability, refractoriness","Only contractility","Only elasticity","Only secretion"], a:0, exp:"Conduction tissue shows automaticity, conductivity, excitability and refractory periods."},
+      {q:"Automaticity means:", options:["Requires external stimulus to fire","Spontaneous depolarization to generate impulses","No electrical activity","Only mechanical activity"], a:1, exp:"Pacemaker cells depolarize spontaneously to initiate heartbeats."},
+      {q:"Electrocardiography (ECG) is:", options:["Recording of mechanical heart sounds","Recording of electrical activity of the heart at body surface","Measurement of blood pressure","Imaging of coronary arteries"], a:1, exp:"ECG records summed electrical potentials produced by cardiac depolarization and repolarization."},
+
+      {q:"P wave on ECG represents:", options:["Atrial depolarization","Ventricular depolarization","Ventricular repolarization","AV node delay"], a:0, exp:"P wave corresponds to atrial depolarization."},
+      {q:"PR interval reflects:", options:["Time for atrial depolarization and AV conduction","Ventricular repolarization","Time of QRS only","ST segment"], a:0, exp:"PR interval measures conduction from atria through AV node to ventricles."},
+      {q:"QRS complex represents:", options:["Ventricular depolarization","Atrial repolarization","Atrial contraction","Ventricular filling"], a:0, exp:"QRS is ventricular depolarization; atrial repolarization is hidden within it."},
+      {q:"ST segment elevation most commonly indicates:", options:["Acute myocardial injury (transmural ischemia)","Normal variant","Hyperkalemia only","Pericardial knock"], a:0, exp:"ST elevation is a classic sign of acute transmural myocardial injury."},
+      {q:"T wave corresponds to:", options:["Ventricular repolarization","Atrial depolarization","AV node conduction","Bundle branch block"], a:0, exp:"T wave reflects ventricular repolarization."},
+
+      {q:"U wave (when present) may reflect:", options:["Late ventricular repolarization or hypokalemia","Atrial depolarization","Bundle branch block","Pericardial effusion"], a:0, exp:"Prominent U waves can be seen with hypokalemia or slow repolarization."},
+      {q:"Lead II is often used because it typically shows:", options:["Best view of P wave and rhythm","Only QRS","Only ST changes","No useful information"], a:0, exp:"Lead II aligns with atrial-to-ventricular axis and often shows clear P waves."},
+      {q:"Standard limb leads are:", options:["I, II, III","aVR, aVL, aVF","V1–V6","X, Y, Z"], a:0, exp:"Limb leads I, II, III form Einthoven's triangle."},
+      {q:"Augmented limb leads are:", options:["aVR, aVL, aVF","I, II, III","V1–V6","None"], a:0, exp:"aVR, aVL and aVF are augmented unipolar limb leads."},
+      {q:"Precordial (chest) leads are:", options:["V1–V6","I–III","aVR–aVF","X–Z"], a:0, exp:"V1–V6 are placed across the chest to view horizontal plane."},
+
+      {q:"Placement of V1 is at:", options:["4th intercostal space, right sternal border","5th intercostal space midclavicular","Left axilla","Right clavicle"], a:0, exp:"V1 is at 4th ICS at the right sternal border."},
+      {q:"Placement of V6 is at:", options:["5th intercostal space midaxillary line","4th ICS right sternal border","2nd ICS left sternal border","At the apex only"], a:0, exp:"V6 is at 5th ICS in the midaxillary line."},
+      {q:"Lead I records potential between:", options:["Left arm and right arm (LA − RA)","Left leg and right arm","Chest and arm","Ventricles only"], a:0, exp:"Lead I measures potential difference between LA and RA."},
+      {q:"aVR generally views the heart from the:", options:["Right upper side (cavity)","Left lateral wall","Inferior wall","Apex"], a:0, exp:"aVR faces the right upper side of the heart and cavity."},
+      {q:"PR segment (not interval) represents:", options:["Isoelectric period of AV nodal delay","Ventricular depolarization","Atrial depolarization","Ventricular repolarization"], a:0, exp:"PR segment is the flat line between end of P and start of QRS, reflecting AV nodal delay."},
+
+      {q:"Normal QRS duration is approximately:", options:["<120 ms",">200 ms","300–400 ms","No standard"], a:0, exp:"Normal QRS duration is under 120 milliseconds."},
+      {q:"Prolonged PR interval indicates:", options:["First-degree AV block","Ventricular fibrillation","Myocardial infarction only","No clinical significance"], a:0, exp:"A prolonged PR interval (>200 ms) indicates first-degree AV block."},
+      {q:"A widened QRS (>120 ms) suggests:", options:["Bundle branch block or ventricular conduction delay","Normal variant","Only atrial problem","Pericarditis"], a:0, exp:"Widened QRS indicates intraventricular conduction delay such as bundle branch block."},
+      {q:"ST depression may indicate:", options:["Subendocardial ischemia or strain","Transmural infarction","Normal ECG","Pericardial knock"], a:0, exp:"ST depression is often seen with subendocardial ischemia or strain."},
+      {q:"ECG lead placement is important because:", options:["Misplacement alters interpretation and can mimic pathology","It has no effect","Only affects heart sounds","Only affects blood pressure"], a:0, exp:"Incorrect lead placement can produce misleading ECG changes."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const counter = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const quizCard = document.getElementById('quizCard');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function renderQuestion() {
+      const item = questions[idx];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      explainEl.textContent = item.exp;
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+        label.tabIndex = 0;
+        label.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> ${opt}`;
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          label.querySelector('input').checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if (e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Please select an option before checking.';
+        explainEl.style.display = 'block';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[idx].a;
+      const labels = Array.from(optionsBox.querySelectorAll('.option'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    renderQuestion();
+  </script>
+</body>
+</html>

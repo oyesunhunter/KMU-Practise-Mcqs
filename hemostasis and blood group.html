@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Hemostasis, Coagulation & Blood Groups — 50 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text);}
+    .wrap{max-width:980px;margin:28px auto;padding:18px;}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.4rem}
+    .meta{display:flex;align-items:center;gap:12px;margin:12px 0;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .question{font-size:1.05rem;margin:12px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .option.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .option.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:12px;padding-top:8px;border-top:1px dashed #12202b;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:18px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Hemostasis, Coagulation & Blood Groups — 50 MCQs</h1>
+
+      <div class="meta">
+        <div id="counter">Question 1 of 50</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    // 50 MCQs: hemostasis, coagulation, fibrinolysis, ABO & Rh
+    const questions = [
+      {q:"Hemostasis is best defined as:", options:["Formation of blood cells","Process that stops bleeding","Production of antibodies","Regulation of blood pressure"], a:1, exp:"Hemostasis arrests bleeding via vasoconstriction, platelet plug formation and coagulation."},
+      {q:"First immediate response to vascular injury is:", options:["Platelet aggregation","Vasoconstriction (vascular spasm)","Fibrinolysis","Thrombin generation"], a:1, exp:"Vascular spasm reduces blood loss immediately after injury."},
+      {q:"Primary hemostasis primarily involves:", options:["Fibrin formation","Platelet adhesion and aggregation","Plasmin activation","Clot retraction only"], a:1, exp:"Platelets adhere to exposed subendothelium and aggregate to form a temporary plug."},
+      {q:"Secondary hemostasis refers to:", options:["Platelet plug formation","Coagulation cascade producing fibrin","Vasodilation","Antibody production"], a:1, exp:"Coagulation cascade generates fibrin to stabilize the platelet plug."},
+      {q:"Which factor is fibrinogen?", options:["Factor I","Factor II","Factor III","Factor IV"], a:0, exp:"Factor I is fibrinogen, converted by thrombin into fibrin."},
+      {q:"Prothrombin corresponds to which factor number?", options:["I","II","III","IV"], a:1, exp:"Factor II is prothrombin, the precursor of thrombin."},
+      {q:"Tissue factor (TF) is designated as:", options:["Factor I","Factor II","Factor III","Factor IV"], a:2, exp:"Factor III (tissue factor) initiates the extrinsic pathway when exposed."},
+      {q:"Calcium ion is which coagulation factor number?", options:["II","IV","V","X"], a:1, exp:"Factor IV is calcium, required for multiple coagulation steps."},
+      {q:"Intrinsic pathway is classically initiated by activation of:", options:["Factor VII","Factor XII (contact activation)","Factor III","Factor I"], a:1, exp:"Contact activation of factor XII starts the intrinsic cascade in vitro."},
+      {q:"Extrinsic pathway is initiated by:", options:["Exposure of tissue factor and activation of factor VII","Contact activation of factor XII","Platelet aggregation only","Plasmin activation"], a:0, exp:"Tissue factor binds factor VIIa to activate factor X in the extrinsic route."},
+      {q:"Both intrinsic and extrinsic pathways converge at:", options:["Factor V","Factor X","Factor XII","Factor I"], a:1, exp:"Activation of factor X begins the common pathway leading to thrombin generation."},
+      {q:"Thrombin (IIa) converts fibrinogen to:", options:["Prothrombin","Fibrin monomers","Factor X","Plasmin"], a:1, exp:"Thrombin cleaves fibrinogen to fibrin, forming the clot matrix."},
+      {q:"Factor XIII function is to:", options:["Activate platelets","Cross-link and stabilize fibrin","Convert fibrinogen to fibrin","Inhibit plasmin"], a:1, exp:"Factor XIII (fibrin-stabilizing factor) cross-links fibrin strands."},
+      {q:"Platelet adhesion to exposed collagen is mediated by:", options:["Fibrinogen only","von Willebrand factor (vWF) and platelet receptors","Plasmin","Protein C"], a:1, exp:"vWF binds collagen and platelet GPIb receptors, enabling adhesion."},
+      {q:"Platelet aggregation is mediated by:", options:["vWF only","Fibrinogen binding to GPIIb/IIIa","Plasmin","Protein S"], a:1, exp:"Fibrinogen cross-links platelets via GPIIb/IIIa receptors."},
+      {q:"Which lab test primarily assesses the extrinsic pathway?", options:["aPTT","PT (prothrombin time)","Bleeding time","Platelet count"], a:1, exp:"PT measures extrinsic (VII) and common pathway function."},
+      {q:"Which lab test primarily assesses the intrinsic pathway?", options:["PT","aPTT","INR","Bleeding time"], a:1, exp:"aPTT evaluates intrinsic pathway factors (XII, XI, IX, VIII) and common pathway."},
+      {q:"Vitamin K is required for γ‑carboxylation of which factors?", options:["I, V, VIII","II, VII, IX, X","III, IV, V","XI, XII, XIII"], a:1, exp:"Vitamin K is necessary for modification of II, VII, IX and X."},
+      {q:"Antithrombin inhibits:", options:["Thrombin and factor Xa","Platelets only","vWF","Fibrin"], a:0, exp:"Antithrombin neutralizes thrombin and factor Xa among others."},
+      {q:"Protein C (with protein S) inactivates:", options:["Va and VIIIa","Factor I","Plasmin","vWF"], a:0, exp:"Activated protein C degrades factors Va and VIIIa to limit clotting."},
+      {q:"Heparin exerts anticoagulant effect by:", options:["Inhibiting vitamin K","Enhancing antithrombin activity","Directly degrading fibrin","Activating platelets"], a:1, exp:"Heparin potentiates antithrombin, which inhibits thrombin and factor Xa."},
+      {q:"Warfarin acts by:", options:["Directly inhibiting thrombin","Inhibiting vitamin K epoxide reductase","Activating plasmin","Stimulating platelet aggregation"], a:1, exp:"Warfarin blocks vitamin K recycling, impairing synthesis of several clotting factors."},
+      {q:"Fibrinolysis is mediated by which enzyme that digests fibrin?", options:["Thrombin","Plasmin","Factor XIII","vWF"], a:1, exp:"Plasmin cleaves fibrin and dissolves clots; plasminogen is activated by tPA/uPA."},
+      {q:"tPA (tissue plasminogen activator) converts:", options:["Plasmin to plasminogen","Plasminogen to plasmin","Fibrin to fibrinogen","Thrombin to prothrombin"], a:1, exp:"tPA activates plasminogen to plasmin, promoting fibrinolysis."},
+      {q:"α2‑antiplasmin functions to:", options:["Activate plasmin","Inhibit plasmin","Convert fibrinogen to fibrin","Stimulate platelets"], a:1, exp:"α2‑antiplasmin neutralizes plasmin to prevent excessive clot breakdown."},
+      {q:"Disseminated intravascular coagulation (DIC) is characterized by:", options:["Only bleeding","Widespread clotting with secondary bleeding due to consumption","Only thrombosis","Only platelet increase"], a:1, exp:"DIC causes microthrombi formation and consumption of clotting factors leading to bleeding."},
+      {q:"von Willebrand disease causes bleeding because it:", options:["Reduces platelet adhesion and decreases factor VIII stability","Increases fibrinolysis","Causes thrombocytosis","Enhances thrombin activity"], a:0, exp:"vWF mediates platelet adhesion and stabilizes factor VIII; deficiency impairs primary hemostasis."},
+      {q:"Hemophilia A is deficiency of:", options:["Factor VIII","Factor IX","Factor XI","Factor V"], a:0, exp:"Hemophilia A results from factor VIII deficiency (X-linked)." },
+      {q:"Hemophilia B is deficiency of:", options:["Factor IX","Factor VIII","Factor XII","Factor XIII"], a:0, exp:"Hemophilia B is caused by factor IX deficiency."},
+      {q:"Platelet count is most directly relevant to:", options:["Coagulation factor levels","Primary hemostasis and bleeding risk","Fibrinolysis only","ABO typing"], a:1, exp:"Low platelet counts increase bleeding risk due to impaired primary hemostasis."},
+      {q:"Cryoprecipitate is rich in:", options:["Platelets","Fibrinogen, factor VIII and vWF","Red cells","Albumin"], a:1, exp:"Cryoprecipitate contains fibrinogen, factor VIII, vWF and factor XIII."},
+      {q:"Fresh frozen plasma (FFP) provides:", options:["Red cells","All clotting factors","Platelets only","Only fibrinogen"], a:1, exp:"FFP supplies coagulation factors for deficiency or reversal of warfarin."},
+      {q:"ABO blood groups are determined by:", options:["Plasma proteins only","Antigens (carbohydrates) on RBC surfaces","White blood cell antigens","Platelet antigens only"], a:1, exp:"ABO antigens are carbohydrate structures on RBC membranes."},
+      {q:"Type A blood has which antibodies in plasma?", options:["Anti-A","Anti-B","Both anti-A and anti-B","No antibodies"], a:1, exp:"Type A individuals have A antigen on RBCs and anti-B antibodies in plasma."},
+      {q:"Type O blood has which antigen/antibody profile?", options:["A antigen only","B antigen only","No A/B antigens and both anti-A and anti-B antibodies","Both A and B antigens"], a:2, exp:"Type O RBCs lack A and B antigens; plasma contains both anti-A and anti-B."},
+      {q:"Type AB individuals are universal plasma donors because:", options:["They have anti-A and anti-B","They lack anti-A and anti-B antibodies","They have extra clotting factors","They are Rh-negative"], a:1, exp:"AB plasma lacks anti-A/B antibodies and can be given to many recipients."},
+      {q:"Universal red cell donor (practical) is:", options:["AB positive","O negative","A positive","B negative"], a:1, exp:"O negative lacks A/B and D antigens, minimizing immediate hemolytic risk in emergencies."},
+      {q:"Rh D antigen presence defines:", options:["Rh negative","Rh positive","ABO group","Platelet type"], a:1, exp:"Presence of D antigen indicates Rh positive status."},
+      {q:"An Rh-negative mother exposed to Rh-positive fetal blood may develop:", options:["No immune response","Anti-D antibodies that can affect future pregnancies","Immediate ABO incompatibility","Platelet antibodies"], a:1, exp:"Maternal anti-D can cause hemolytic disease of the fetus/newborn in subsequent pregnancies."},
+      {q:"Anti-D immunoglobulin given to an Rh-negative mother prevents:", options:["ABO incompatibility","Maternal sensitization to D antigen","Platelet dysfunction","vWF deficiency"], a:1, exp:"Anti-D Ig prevents maternal alloimmunization to fetal D antigen."},
+      {q:"Crossmatch before transfusion checks:", options:["Only blood type","Compatibility of donor RBCs with recipient plasma","Only platelet count","Only coagulation"], a:1, exp:"Crossmatch detects incompatible antibodies and prevents hemolytic transfusion reactions."},
+      {q:"Acute hemolytic transfusion reaction is most often due to:", options:["ABO incompatibility","Rh match","Low platelets","Fibrinolysis"], a:0, exp:"ABO mismatch can cause rapid complement-mediated hemolysis and shock."},
+      {q:"Delayed hemolytic transfusion reaction is usually due to:", options:["Immediate ABO antibodies","Anamnestic response to non-ABO antigens (e.g., Rh, Kidd)","Platelet activation","vWF deficiency"], a:1, exp:"Delayed reactions arise from secondary antibody responses to previously encountered antigens."},
+      {q:"Indication for platelet transfusion includes:", options:["Severe thrombocytopenia with bleeding","Anemia only","Coagulation factor deficiency only","Rh incompatibility"], a:0, exp:"Platelets are given for bleeding due to low platelet counts or dysfunctional platelets."},
+      {q:"Antithrombin deficiency predisposes to:", options:["Bleeding","Thrombosis","Infection","Hypertension"], a:1, exp:"Antithrombin deficiency increases risk of venous thrombosis."},
+      {q:"Protein C deficiency can present with:", options:["Bleeding","Warfarin-induced skin necrosis and thrombosis","Impaired fibrinolysis only","Low platelets"], a:1, exp:"Protein C deficiency causes hypercoagulability and risk of skin necrosis with warfarin."},
+      {q:"Heparin-induced thrombocytopenia (HIT) is characterized by:", options:["Bleeding only","Immune-mediated platelet activation causing thrombosis","vWF deficiency","Excessive fibrinolysis"], a:1, exp:"HIT causes paradoxical thrombosis despite low platelet counts."},
+      {q:"tPA is used clinically to:", options:["Promote clot formation","Lyse thrombi in ischemic stroke or MI when indicated","Inhibit platelets","Stabilize fibrin"], a:1, exp:"tPA activates plasminogen to dissolve clots in selected patients."},
+      {q:"PT/INR is monitored in patients on:", options:["Heparin","Warfarin","Aspirin","tPA"], a:1, exp:"Warfarin therapy is monitored using PT/INR."},
+      {q:"aPTT is monitored in patients on:", options:["Warfarin","Unfractionated heparin","Aspirin","tPA"], a:1, exp:"aPTT is used to monitor unfractionated heparin therapy."},
+      {q:"Cryoprecipitate is indicated to replace:", options:["Platelets","Fibrinogen and factor VIII","Red cells","Albumin"], a:1, exp:"Cryoprecipitate provides fibrinogen, factor VIII, vWF and factor XIII."},
+      {q:"Which factor is the fibrin-stabilizing factor?", options:["Factor VIII","Factor XIII","Factor V","Factor VII"], a:1, exp:"Factor XIII cross-links fibrin to stabilize the clot."},
+      {q:"Calcium (factor IV) is required for:", options:["Only platelet adhesion","Multiple steps in coagulation including complex assembly","Only fibrinolysis","Only vitamin K function"], a:1, exp:"Ca2+ is essential for several coagulation reactions and complex formation."}
+    ];
+
+    // state
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+
+    // elements
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const counter = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const quizCard = document.getElementById('quizCard');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function renderQuestion() {
+      const item = questions[idx];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      explainEl.textContent = item.exp;
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+        label.tabIndex = 0;
+        label.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> ${opt}`;
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          label.querySelector('input').checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if (e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        // gentle inline message
+        explainEl.textContent = 'Please select an option before checking.';
+        explainEl.style.display = 'block';
+        explainEl.style.color = 'var(--danger)';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[idx].a;
+      const labels = Array.from(optionsBox.querySelectorAll('.option'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        // finish
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    renderQuestion();
+  </script>
+</body>
+</html>

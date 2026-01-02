@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Circulation & Cardiac Conduction — 25 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text)}
+    .wrap{max-width:920px;margin:28px auto;padding:18px}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border:1px solid #16202b;border-radius:12px;padding:16px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.25rem}
+    .intro{color:var(--muted);font-size:0.95rem;margin:10px 0 14px}
+    .meta{display:flex;align-items:center;gap:12px;margin:8px 0;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .question{font-size:1.05rem;margin:12px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .option.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .option.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:12px;padding-top:8px;border-top:1px dashed #12202b;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:18px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Systemic & Pulmonary Circulation, Capillaries, Conduction — 25 MCQs</h1>
+      <div class="intro">Short definitions: <strong>Systemic</strong> = left heart → body → right heart; <strong>Pulmonary</strong> = right heart → lungs → left heart; <strong>Capillaries</strong> = exchange vessels; <strong>Conduction system</strong> = SA → AV → His → bundle branches → Purkinje.</div>
+
+      <div class="meta">
+        <div id="counter">Question 1 of 25</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"Systemic circulation carries blood from the:", options:["Right ventricle to lungs","Left ventricle to body tissues","Right atrium to left atrium","Pulmonary veins to left ventricle"], a:1, exp:"Systemic circulation delivers oxygenated blood from the left ventricle to tissues and returns deoxygenated blood to the right atrium."},
+      {q:"Major artery leaving the left ventricle is the:", options:["Pulmonary trunk","Aorta","Superior vena cava","Pulmonary vein"], a:1, exp:"The aorta arises from the left ventricle and distributes blood to systemic arteries."},
+      {q:"Arterioles in systemic circulation primarily determine:", options:["Blood volume","Systemic vascular resistance and regional flow","Venous return","Heart rate"], a:1, exp:"Arterioles control resistance and regulate distribution of blood flow."},
+      {q:"Mean arterial pressure (MAP) is mainly determined by:", options:["Cardiac output × systemic vascular resistance","Heart sounds","Capillary permeability","Blood type"], a:0, exp:"MAP depends on cardiac output and systemic vascular resistance."},
+      {q:"Venous system functions chiefly as:", options:["Exchange vessels","High-pressure conduits","Capacitance (volume) reservoir","Primary resistance vessels"], a:2, exp:"Veins store blood and return it to the heart; they are capacitance vessels."},
+
+      {q:"Pulmonary circulation carries blood from the:", options:["Left ventricle to body","Right ventricle to lungs","Left atrium to left ventricle","Aorta to systemic capillaries"], a:1, exp:"Pulmonary circulation moves deoxygenated blood from the right ventricle to the lungs for gas exchange."},
+      {q:"Pulmonary vessels compared with systemic vessels are:", options:["Higher pressure and higher resistance","Lower pressure and lower resistance","Identical in pressure","Noncompliant rigid tubes"], a:1, exp:"Pulmonary circulation is low-pressure, low-resistance to accommodate full cardiac output at low pressures."},
+      {q:"Pulmonary capillaries are the site of:", options:["Nutrient exchange only","Gas exchange (O₂ uptake, CO₂ removal)","Electrical conduction","Hormone secretion"], a:1, exp:"Alveolar capillaries exchange oxygen and carbon dioxide with alveolar air."},
+      {q:"Hypoxia in pulmonary circulation causes:", options:["Vasodilation","Vasoconstriction","No change","Increased capillary permeability only"], a:1, exp:"Pulmonary vessels constrict in response to local hypoxia (hypoxic pulmonary vasoconstriction) to match ventilation and perfusion."},
+      {q:"Pulmonary veins return blood to the:", options:["Right atrium","Left atrium","Right ventricle","Left ventricle"], a:1, exp:"Pulmonary veins carry oxygenated blood from lungs to the left atrium."},
+
+      {q:"Capillaries are best described as:", options:["Thick-walled muscular vessels","Single endothelial cell layer specialized for exchange","Large capacitance veins","Conduction fibers"], a:1, exp:"Capillaries are one cell thick to permit efficient exchange of gases, nutrients and waste."},
+      {q:"Continuous capillaries with tight junctions are typical of the:", options:["Liver sinusoids","Kidney glomerulus","Blood–brain barrier (brain)","Spleen"], a:2, exp:"Continuous capillaries with tight junctions form the blood–brain barrier."},
+      {q:"Fenestrated capillaries are common in the:", options:["Liver","Bone marrow","Kidney glomerulus and endocrine organs","Skin"], a:2, exp:"Fenestrated capillaries allow rapid exchange in kidneys and endocrine glands."},
+      {q:"Sinusoidal capillaries are found in the:", options:["Brain","Liver and bone marrow","Heart","Lungs only"], a:1, exp:"Sinusoids have large gaps for cell and protein passage in liver, spleen and bone marrow."},
+      {q:"Starling forces governing fluid exchange include:", options:["Hydrostatic and oncotic pressures","Only hydrostatic pressure","Only oncotic pressure","Electrical gradients"], a:0, exp:"Fluid movement across capillaries is determined by hydrostatic (push) and oncotic (pull) pressures."},
+
+      {q:"An increase in capillary hydrostatic pressure favors:", options:["Absorption into capillary","Filtration out of capillary into interstitium","No fluid movement","Immediate clotting"], a:1, exp:"Higher hydrostatic pressure pushes fluid out of capillaries, increasing filtration and edema risk."},
+      {q:"Lymphatic vessels return excess interstitial fluid to the:", options:["Arterial system","Venous circulation","Capillary lumen","Heart conduction system"], a:1, exp:"Lymphatics drain interstitial fluid and return it to the venous circulation."},
+      {q:"Local metabolic vasodilation (e.g., increased CO₂, low O₂) increases:", options:["Arteriolar resistance","Capillary perfusion to active tissue","Venous pressure only","Heart rate directly"], a:1, exp:"Metabolic byproducts cause arteriolar dilation, increasing local blood flow and capillary perfusion."},
+      {q:"Systemic venous return is a major determinant of:", options:["Afterload","Preload (ventricular filling)","Heart sounds","Capillary type"], a:1, exp:"Venous return sets preload (EDV), which influences stroke volume via Frank-Starling mechanism."},
+      {q:"Compliance (distensibility) is greatest in:", options:["Arteries","Arterioles","Veins","Capillaries"], a:2, exp:"Veins are highly compliant and accommodate large volume changes with small pressure changes."},
+
+      {q:"Conduction system pacemaker hierarchy (fastest to slowest) is:", options:["AV node > SA node > Purkinje","SA node > AV node > Purkinje","Purkinje > AV node > SA node","Bundle branches > SA node > AV node"], a:1, exp:"SA node normally has the highest intrinsic rate, then AV node, then Purkinje fibers."},
+      {q:"SA node is located in the:", options:["Left ventricle","Right atrium at the SVC junction","Interventricular septum","Coronary sinus"], a:1, exp:"SA node sits in the right atrium near the superior vena cava and is the usual pacemaker."},
+      {q:"AV node function includes:", options:["Rapid conduction to ventricles","Delay of impulse to allow atrial contraction before ventricular systole","Generating the fastest impulses","Pumping blood"], a:1, exp:"AV nodal delay times atrial contraction to precede ventricular ejection."},
+      {q:"Bundle of His divides into:", options:["Coronary arteries","Right and left bundle branches","Pulmonary veins","Atrial internodal tracts"], a:1, exp:"Bundle of His transmits impulses to right and left bundle branches down the interventricular septum."},
+      {q:"Purkinje fibers distribute impulse to:", options:["Atrial myocardium only","Ventricular myocardium for coordinated contraction","SA node","AV node"], a:1, exp:"Purkinje network rapidly conducts to ventricular muscle to synchronize contraction."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const counter = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const quizCard = document.getElementById('quizCard');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function renderQuestion() {
+      const item = questions[idx];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      explainEl.textContent = item.exp;
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+        label.tabIndex = 0;
+        label.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> ${opt}`;
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          label.querySelector('input').checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if (e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Please select an option before checking.';
+        explainEl.style.display = 'block';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[idx].a;
+      const labels = Array.from(optionsBox.querySelectorAll('.option'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    renderQuestion();
+  </script>
+</body>
+</html>

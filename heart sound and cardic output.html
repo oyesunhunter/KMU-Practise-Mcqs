@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Heart Sounds & Cardiac Physiology — 40 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text);}
+    .wrap{max-width:900px;margin:28px auto;padding:18px;}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.3rem}
+    .meta{display:flex;align-items:center;gap:12px;margin:12px 0;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .question{font-size:1.05rem;margin:12px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .option.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .option.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:12px;padding-top:8px;border-top:1px dashed #12202b;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:18px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Heart Sounds & Cardiac Physiology — 40 MCQs</h1>
+
+      <div class="meta">
+        <div id="counter">Question 1 of 40</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"S1 corresponds to:", options:["Closure of aortic & pulmonary valves","Closure of mitral & tricuspid valves","Opening of mitral valve","Opening of aortic valve"], a:1, exp:"S1 = AV valve closure at systole onset."},
+      {q:"S2 corresponds to:", options:["Closure of AV valves","Closure of semilunar valves","Opening of AV valves","Opening of semilunar valves"], a:1, exp:"S2 = aortic and pulmonary valve closure."},
+      {q:"Physiologic splitting of S2 increases with:", options:["Inspiration","Expiration","Valsalva","Standing"], a:0, exp:"Inspiration delays pulmonic closure, widening split."},
+      {q:"S3 is:", options:["Late diastolic (atrial) sound","Early diastolic sound during rapid filling","Systolic click","Opening snap"], a:1, exp:"S3 occurs in early diastole during rapid ventricular filling."},
+      {q:"S4 indicates:", options:["Atrial contraction into stiff ventricle","Normal young heart","Valve prolapse","Pericardial knock"], a:0, exp:"S4 occurs with atrial contraction against a noncompliant ventricle."},
+
+      {q:"Right-sided murmurs increase with:", options:["Inspiration","Expiration","Handgrip","Valsalva"], a:0, exp:"Inspiration increases venous return to right heart, accentuating right-sided murmurs."},
+      {q:"Holosystolic murmur radiating to axilla suggests:", options:["Aortic stenosis","Mitral regurgitation","Pulmonary stenosis","Mitral stenosis"], a:1, exp:"Mitral regurgitation radiates to the axilla."},
+      {q:"Harsh systolic ejection murmur at RUSB radiating to carotids suggests:", options:["Aortic stenosis","Tricuspid regurgitation","Mitral regurgitation","VSD"], a:0, exp:"Aortic stenosis classically radiates to carotids."},
+      {q:"Early diastolic decrescendo murmur suggests:", options:["Aortic regurgitation","Mitral regurgitation","Tricuspid regurgitation","Aortic stenosis"], a:0, exp:"Aortic regurgitation produces an early diastolic decrescendo murmur."},
+      {q:"Continuous 'machinery' murmur indicates:", options:["Mitral stenosis","Patent ductus arteriosus","Aortic stenosis","Tricuspid stenosis"], a:1, exp:"PDA causes a continuous machinery murmur."},
+
+      {q:"Phonocardiography records:", options:["Electrical activity","Heart sounds graphically","Blood pressure","Oxygen saturation"], a:1, exp:"Phonocardiography graphs acoustic heart events."},
+      {q:"Doppler echocardiography helps by:", options:["Recording S1 amplitude","Measuring flow velocities and timing","Measuring blood glucose","Detecting infection"], a:1, exp:"Doppler correlates flow with murmurs."},
+      {q:"Auscultation is used for:", options:["Quantitative CO measurement","Bedside detection of heart sounds and murmurs","Measuring stroke volume","Measuring cardiac index"], a:1, exp:"Auscultation is primary bedside assessment."},
+      {q:"Spectral analysis of sounds differentiates:", options:["Frequency components of murmurs","Blood pressure","ECG intervals","Respiratory rate"], a:0, exp:"Spectral analysis separates frequency components."},
+      {q:"Pericardial knock is seen in:", options:["Aortic stenosis","Constrictive pericarditis","Mitral regurgitation","VSD"], a:1, exp:"Pericardial knock occurs in constrictive pericarditis."},
+
+      {q:"Cardiac output (CO) =:", options:["SV × HR","EDV × HR","EF × HR","SV + HR"], a:0, exp:"CO equals stroke volume times heart rate."},
+      {q:"Normal resting CO (adult) is about:", options:["0.5–1 L/min","2–3 L/min","4–8 L/min","10–15 L/min"], a:2, exp:"Typical resting CO ≈ 4–8 L/min."},
+      {q:"Stroke volume (SV) =:", options:["EDV − ESV","ESV − EDV","CO/HR","EF × EDV"], a:0, exp:"SV equals end-diastolic minus end-systolic volume."},
+      {q:"Ejection fraction (EF) =:", options:["SV/EDV ×100%","CO/HR","ESV/EDV","EDV − SV"], a:0, exp:"EF = (SV/EDV) × 100%."},
+      {q:"Determinants of SV include:", options:["Preload, afterload, contractility","Heart rate only","Blood viscosity only","Valve area only"], a:0, exp:"SV depends on preload, afterload and contractility."},
+
+      {q:"Preload approximates:", options:["LV end-diastolic volume/pressure","Systemic vascular resistance","Heart rate","Aortic pressure"], a:0, exp:"Preload reflects ventricular filling (EDV/EDP)."},
+      {q:"Afterload relates to:", options:["Arterial pressure and systemic vascular resistance","Venous return","Heart rate","Blood oxygen content"], a:0, exp:"Afterload is the load the ventricle must overcome to eject."},
+      {q:"Contractility is:", options:["Intrinsic myocardial inotropic state","Passive stretch only","Heart rate only","Valve function"], a:0, exp:"Contractility is the intrinsic strength of myocardial contraction."},
+      {q:"Frank-Starling mechanism:", options:["Increased preload increases SV up to a point","Increased afterload increases SV","HR determines preload","Contractility independent of preload"], a:0, exp:"Greater EDV stretches myocardium, increasing SV."},
+      {q:"Heart rate (HR) is:", options:["Beats per minute","Stroke volume per beat","CO per minute","EDV"], a:0, exp:"HR is the number of beats per minute."},
+
+      {q:"Normal resting HR range:", options:["20–40 bpm","60–100 bpm","120–160 bpm","200–220 bpm"], a:1, exp:"Resting HR typically 60–100 bpm."},
+      {q:"Chronotropic effect changes:", options:["Heart rate","Contractility","Preload","Afterload"], a:0, exp:"Chronotropy affects heart rate."},
+      {q:"Minute volume (cardiac context) refers to:", options:["CO (blood minute volume)","Tidal volume × respiratory rate only","SV × HR only","EDV × ESV"], a:0, exp:"CO is the minute volume of blood; respiratory minute volume is tidal volume × RR."},
+      {q:"Cardiac index (CI) =:", options:["CO / body surface area","CO × body weight","SV × HR × BSA","HR / CO"], a:0, exp:"CI normalizes CO to body surface area."},
+      {q:"Normal CI range (approx):", options:["0.5–1.0 L/min/m²","2.5–4.0 L/min/m²","6–8 L/min/m²","10–12 L/min/m²"], a:1, exp:"Normal CI ≈ 2.5–4.0 L/min/m²."},
+
+      {q:"CO increases during exercise due to:", options:["Increased HR and SV","Decreased contractility","Decreased preload","Increased afterload only"], a:0, exp:"Exercise raises HR and SV, increasing CO."},
+      {q:"Factors decreasing CO include:", options:["Hypovolemia, severe bradycardia, heart failure","Exercise and fever","Pregnancy","Sympathetic stimulation"], a:0, exp:"Hypovolemia, bradycardia and pump failure reduce CO."},
+      {q:"Fick method requires measurement of:", options:["Oxygen consumption and arterial-venous O2 difference","Blood pressure only","ECG only","Echocardiography only"], a:0, exp:"Fick uses VO₂ and arteriovenous O₂ content difference to calculate CO."},
+      {q:"Thermodilution CO measurement uses:", options:["Cold indicator injection and PA temperature change","Doppler only","MRI only","Pulse oximetry only"], a:0, exp:"Cold saline injected; temperature change in pulmonary artery is measured."},
+      {q:"Doppler echocardiography estimates CO by:", options:["Measuring flow velocity and valve area to compute SV","Measuring blood temperature","Counting heart sounds","Measuring oxygen consumption"], a:0, exp:"Doppler measures velocity-time integral and area to estimate SV and CO."},
+
+      {q:"Indicator dilution methods include:", options:["Dye or cold indicator dilution and thermodilution","Only Fick","Only auscultation","Only MRI"], a:0, exp:"Indicator dilution techniques use injected markers to compute CO."},
+      {q:"Pulse contour analysis estimates CO from:", options:["Arterial pressure waveform morphology","Heart sounds only","Venous pressure only","ECG amplitude only"], a:0, exp:"Pulse contour uses arterial waveform to estimate stroke volume and CO."},
+      {q:"Respiratory variation in CO can predict:", options:["Fluid responsiveness in ventilated patients","Left ventricular hypertrophy","ABO blood group","Heart sounds"], a:0, exp:"Respiratory variations in stroke volume/CO indicate preload responsiveness."},
+      {q:"Maintenance of CO depends on:", options:["Preload, contractility, afterload and HR","Only heart rate","Only blood pressure","Only oxygen saturation"], a:0, exp:"CO depends on preload, contractility, afterload and heart rate."},
+      {q:"In early heart failure, CO is maintained by:", options:["Increased sympathetic activation and neurohormonal mechanisms","Decreased sympathetic tone","Immediate normalization","Decreased HR"], a:0, exp:"Compensatory sympathetic and RAAS activation maintain CO initially."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const counter = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const quizCard = document.getElementById('quizCard');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function renderQuestion() {
+      const item = questions[idx];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      explainEl.textContent = item.exp;
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+        label.tabIndex = 0;
+        label.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> ${opt}`;
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          label.querySelector('input').checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if (e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Please select an option before checking.';
+        explainEl.style.display = 'block';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[idx].a;
+      const labels = Array.from(optionsBox.querySelectorAll('.option'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    renderQuestion();
+  </script>
+</body>
+</html>

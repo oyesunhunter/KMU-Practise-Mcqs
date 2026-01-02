@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Olfaction & Vomeronasal Quiz — 35 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#071021; --bg2:#0f1724; --card:#0b1220; --muted:#9ca3af;
+      --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);}
+    .wrap{max-width:980px;margin:28px auto;padding:18px;}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    h1{margin:0;color:var(--primary);font-size:1.5rem;text-align:center}
+    .sub{color:var(--muted);text-align:center;font-size:0.95rem}
+    .card{background:linear-gradient(180deg,#07121a,#0b1220);border:1px solid #16202b;border-radius:12px;padding:16px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .qtext{font-size:1.05rem;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .opt input{margin:0}
+    .opt.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .opt.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .feedback{min-height:26px;margin-top:10px;font-weight:700}
+    .feedback.good{color:var(--accent)}
+    .feedback.bad{color:var(--danger)}
+    .controls{display:flex;gap:10px;margin-top:12px;align-items:center}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8;color:#041021}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .collapse{margin-top:12px;border-top:1px dashed #12202b;padding-top:10px}
+    .coll-title{color:var(--muted);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .coll-body{margin-top:8px;display:none;color:#cbd5e1;line-height:1.4}
+    .score{margin-top:14px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;color:var(--muted)}
+    .final{display:none;margin-top:18px;padding:16px;border-radius:10px;background:#071826;border:1px solid #12202b;text-align:center}
+    @media (max-width:520px){.wrap{padding:12px}.qtext{font-size:1rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Olfaction, Vomeronasal Organ & Transduction — 35 MCQs</h1>
+      <div class="sub">One question at a time • Click <strong>Check</strong> to reveal the correct option, then <strong>Next</strong></div>
+    </header>
+
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 35</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="qtext" id="qText"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Vomeronasal organ (VNO)
+      {q:"The vomeronasal organ (VNO) in adult humans is generally considered:", options:["A fully functional pheromone organ","Vestigial or nonfunctional","The primary olfactory organ","Absent in all humans"], ans:1, exp:"In humans the VNO is usually vestigial and lacks a clear accessory olfactory pathway."},
+      {q:"The VNO in many mammals primarily detects:", options:["Light","Pheromones and social chemosignals","Sound","Taste"], ans:1, exp:"In many animals the VNO mediates pheromone detection and social/sexual cues."},
+      {q:"A key reason the human VNO is unlikely to mediate pheromone responses is:", options:["Lack of organized receptor neurons and accessory bulb connections","It is too large","It is located in the tongue","It produces endolymph"], ans:0, exp:"Human VNO tissue lacks the receptor neuron organization and accessory olfactory bulb seen in other mammals."},
+      {q:"Embryologically, VNO structures in humans are best described as:", options:["Always absent","Occasional epithelial remnants or pits","Fully developed bulbs","Part of the cochlea"], ans:1, exp:"Humans may have small VNO-like epithelial remnants but not a functional accessory system."},
+      {q:"Evidence for a functional VNO-mediated pheromone system in humans is:", options:["Strong and conclusive","Limited and controversial","Well established in adults","Only present in infants"], ans:1, exp:"Human pheromone signaling via VNO remains controversial and not well supported."},
+
+      // Olfactory pathway basics
+      {q:"Primary olfactory receptor neurons are located in the:", options:["Inferior nasal meatus","Superior olfactory epithelium","Tongue","Nasopharynx"], ans:1, exp:"Olfactory receptor neurons reside in the superior nasal epithelium."},
+      {q:"Axons of olfactory receptor neurons form:", options:["The olfactory nerve (CN I)","The optic nerve (CN II)","The facial nerve (CN VII)","The vagus nerve (CN X)"], ans:0, exp:"ORN axons bundle to form the olfactory nerve (CN I) projecting to the bulb."},
+      {q:"The first central synapse for olfactory afferents is in the:", options:["Olfactory bulb glomeruli","Thalamus","Piriform cortex","Cochlear nucleus"], ans:0, exp:"ORN axons converge onto glomeruli in the olfactory bulb where they synapse onto mitral/tufted cells."},
+      {q:"Mitral and tufted cells project primarily to:", options:["Piriform (olfactory) cortex and limbic structures","Primary visual cortex","Cerebellum","Spinal cord"], ans:0, exp:"Bulb output reaches piriform cortex, amygdala and other limbic areas for odor perception and emotion."},
+      {q:"Unlike most senses, primary olfactory cortex receives input:", options:["Only after thalamic relay","Directly from the olfactory bulb without obligatory thalamic relay","Only via spinal cord","Only via the cerebellum"], ans:1, exp:"Olfactory cortex receives direct bulb input; thalamic relays are secondary."},
+
+      // Olfactory transduction
+      {q:"Olfactory receptors belong to which receptor family?", options:["Ion channels","G-protein coupled receptors (GPCRs)","Nuclear receptors","Receptor tyrosine kinases"], ans:1, exp:"Odorant receptors are GPCRs that activate intracellular second messengers."},
+      {q:"The G protein commonly associated with olfactory receptors is called:", options:["Golf (G_olf)","Gi only","Gq only","Gs only"], ans:0, exp:"G_olf activates adenylyl cyclase in olfactory transduction."},
+      {q:"Activation of olfactory GPCRs typically increases intracellular:", options:["cAMP","cGMP","ATP","Glucose"], ans:0, exp:"cAMP rises and opens cyclic-nucleotide gated channels, depolarizing the neuron."},
+      {q:"Opening of cyclic-nucleotide gated channels allows influx of:", options:["K+ only","Na+ and Ca2+","Cl- only","Anions only"], ans:1, exp:"CNG channels permit Na+ and Ca2+ entry, producing depolarization."},
+      {q:"Olfactory receptor neurons generate action potentials when:", options:["Depolarization reaches threshold","cAMP is low","They are hyperpolarized","Only during sleep"], ans:0, exp:"Sufficient depolarization from receptor currents triggers APs in ORNs."},
+
+      // Coding and mapping
+      {q:"Each olfactory receptor neuron typically expresses:", options:["Many receptor genes","A single odorant receptor gene type","No receptor genes","Only taste receptors"], ans:1, exp:"Most ORNs express one receptor gene, enabling combinatorial coding."},
+      {q:"Axons from ORNs expressing the same receptor converge onto:", options:["Multiple random glomeruli","A small number of specific glomeruli","The thalamus directly","The cochlea"], ans:1, exp:"Convergence onto specific glomeruli creates spatial odor maps in the bulb."},
+      {q:"Olfactory coding is best described as:", options:["Labeled-line only","Combinatorial patterning across receptors","Single receptor per odor only","Random noise"], ans:1, exp:"Odors are encoded by patterns of receptor activation across many ORNs."},
+      {q:"Temporal patterns of ORN firing contribute to odor coding by:", options:["Providing timing information that complements spatial patterns","Eliminating the need for spatial maps","Only causing adaptation","Only in invertebrates"], ans:0, exp:"Both spatial and temporal patterns help the brain discriminate odors."},
+      {q:"Olfactory bulb glomerular maps are important because they:", options:["Provide spatial representation of receptor activation","Produce CSF","Control breathing","Transmit taste signals"], ans:0, exp:"Glomerular maps organize receptor inputs for downstream processing."},
+
+      // Pathway to cortex and limbic system
+      {q:"Primary olfactory (piriform) cortex is involved in:", options:["Initial odor identification and pattern recognition","Visual processing","Motor coordination","Auditory localization"], ans:0, exp:"Piriform cortex interprets bulb output for odor perception."},
+      {q:"Olfactory projections to the amygdala and hippocampus explain:", options:["Rapid emotional and memory associations with odors","Why odors are loud","Why odors affect vision","Why taste is independent"], ans:0, exp:"Direct limbic connections link smell to emotion and memory."},
+      {q:"Conscious odor discrimination often involves which cortical area beyond piriform cortex?", options:["Orbitofrontal cortex","Primary motor cortex","Primary visual cortex","Cerebellum"], ans:0, exp:"Orbitofrontal cortex integrates olfactory and other sensory inputs for conscious perception."},
+      {q:"Unlike other sensory systems, olfactory information reaches cortex:", options:["After obligatory thalamic relay","Directly from bulb, enabling fast affective responses","Only via spinal cord","Only via brainstem"], ans:1, exp:"Direct bulb-to-cortex routing supports rapid, emotion-linked processing."},
+
+      // Transduction dynamics & adaptation
+      {q:"Olfactory adaptation (reduced response to a persistent odor) involves:", options:["Receptor desensitization and intracellular feedback","Increased receptor expression","Bone remodeling","Hair cell loss"], ans:0, exp:"Adaptation includes receptor and second-messenger feedback reducing sensitivity."},
+      {q:"Odorant molecules must generally be:", options:["Volatile and soluble in mucus","Nonvolatile only","Only water-soluble","Only lipids"], ans:0, exp:"Volatility and solubility in mucus allow odorants to reach receptors."},
+      {q:"Basal cells in olfactory epithelium serve to:", options:["Produce mucus","Regenerate olfactory receptor neurons","Transmit signals to cortex","Form glomeruli"], ans:1, exp:"Basal stem cells replace ORNs throughout life."},
+      {q:"Loss of smell (anosmia) can result from:", options:["Upper respiratory infection, head trauma, or neurodegeneration","Only high blood pressure","Only poor diet","Only aging without other causes"], ans:0, exp:"Anosmia has multiple causes including infection, trauma, and neurodegenerative disease."},
+      {q:"Olfactory receptor gene family size in humans is:", options:["Very small (a few genes)","Large multigene family with hundreds of genes (many pseudogenes)","Single gene only","None"], ans:1, exp:"Humans have a large odorant receptor gene family, though many are pseudogenes."},
+
+      // Clinical & comparative
+      {q:"Testing olfaction clinically commonly uses:", options:["Standardized odor identification (sniff) tests","Visual acuity charts","Audiometry","Reflex hammer"], ans:0, exp:"Sniff tests with known odorants assess olfactory function."},
+      {q:"Presence of a functional accessory olfactory bulb (AOB) is typical in:", options:["Many mammals with VNO-mediated pheromone systems","Humans","All primates","Only birds"], ans:0, exp:"Species with active VNO systems often have an AOB; humans lack a clear AOB."},
+      {q:"Human pheromone perception via a VNO-like pathway is:", options:["Well established and universal","Controversial and not clearly supported","The main olfactory mechanism","Only present in newborns"], ans:1, exp:"Evidence for a human VNO pheromone system is limited and debated."}
+    ];
+
+    let index = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+    const quizCard = document.getElementById('quizCard');
+
+    function render() {
+      const item = questions[index];
+      qText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = item.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${index+1} of ${questions.length}`;
+      progressBar.style.width = `${(index)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        label.tabIndex = 0;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
+        radio.value = i;
+        radio.style.pointerEvents = 'none';
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          radio.checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if(e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    toggleExplain.addEventListener('click', () => {
+      explain.style.display = explain.style.display === 'block' ? 'none' : 'block';
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[index].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      explain.style.display = 'block';
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index++;
+      if (index >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    function restart() {
+      index = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>

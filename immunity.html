@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Immunity — 50 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9ca3af; --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#071021);color:var(--text)}
+    .wrap{max-width:980px;margin:24px auto;padding:18px}
+    .card{background:linear-gradient(180deg,#07121a,var(--card));border-radius:12px;padding:16px;border:1px solid #12202b;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;color:var(--primary);text-align:center;font-size:1.25rem}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:0.95rem;margin:12px 0}
+    .q{font-weight:700;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{background:#071826;padding:10px;border-radius:8px;border:1px solid #12202b;cursor:pointer;display:flex;align-items:center;gap:10px}
+    .opt.correct{background:#063e2a}
+    .opt.wrong{background:#3b0f12}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    button{background:var(--primary);border:none;color:#041021;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    button.secondary{background:#94a3b8}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .explain{margin-top:10px;color:#cbd5e1;display:none}
+    .score{margin-top:12px;color:var(--muted)}
+    .final{display:none;text-align:center;margin-top:12px}
+    @media (max-width:520px){.wrap{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <h1>Immunity — 50 MCQs</h1>
+
+      <div class="meta">
+        <div id="counter">Question 1 of 50</div>
+        <div id="scoreBox">Score: 0 / 0</div>
+      </div>
+
+      <div id="questionArea"></div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="explain" id="explain"></div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"Immunity is best defined as:", opts:["Ability to digest food","Body’s mechanisms to resist infection and disease","Process of blood clotting","Hormone regulation"], a:1, exp:"Immunity protects the body from infection and disease."},
+      {q:"Innate immunity is characterized by:", opts:["Antigen-specific memory","Immediate, nonspecific defense present at birth","Production of high-affinity antibodies only after days","Transfer of maternal IgG only"], a:1, exp:"Innate immunity is immediate and nonspecific."},
+      {q:"Which is a physical barrier of innate immunity:", opts:["Complement proteins","Skin and mucous membranes","T lymphocytes","Memory B cells"], a:1, exp:"Skin and mucosa are physical barriers."},
+      {q:"Pattern recognition receptors (PRRs) detect:", opts:["Specific antibody-antigen complexes","Conserved pathogen-associated molecular patterns (PAMPs)","Only self-antigens","Hormones"], a:1, exp:"PRRs recognize conserved microbial patterns."},
+      {q:"Toll-like receptors (TLRs) are examples of:", opts:["Adaptive immune receptors","Pattern recognition receptors in innate immunity","Complement components","Antibodies"], a:1, exp:"TLRs are innate PRRs."},
+
+      {q:"Phagocytic cells of innate immunity include:", opts:["B cells and T cells","Neutrophils and macrophages","Erythrocytes and platelets","Plasma cells only"], a:1, exp:"Neutrophils and macrophages phagocytose microbes."},
+      {q:"Natural killer (NK) cells primarily function to:", opts:["Produce antibodies","Kill infected or stressed host cells without prior sensitization","Present antigen to T cells","Form memory cells"], a:1, exp:"NK cells kill abnormal host cells without prior sensitization."},
+      {q:"Complement activation results in all EXCEPT:", opts:["Opsonization of microbes","Formation of membrane attack complex (MAC)","Direct generation of memory B cells","Promotion of inflammation"], a:2, exp:"Complement does not create memory B cells."},
+      {q:"Acute‑phase proteins (e.g., CRP) are part of:", opts:["Adaptive immunity only","Innate immune response and inflammation","Neural signaling","Red blood cell function"], a:1, exp:"Acute-phase proteins are innate inflammatory mediators."},
+      {q:"Inflammation in innate immunity serves to:", opts:["Reduce blood flow to infected tissue only","Increase vascular permeability and recruit immune cells","Produce antibodies immediately","Destroy lymph nodes"], a:1, exp:"Inflammation recruits cells and increases permeability."},
+
+      {q:"Which statement about innate immunity is true:", opts:["It requires prior exposure to act","It is antigen-specific and long-lived memory","It provides the first line of defense and shapes adaptive responses","It only operates in the spleen"], a:2, exp:"Innate immunity acts first and shapes adaptive responses."},
+      {q:"Acquired (adaptive) immunity is characterized by:", opts:["Immediate nonspecific action","Antigen specificity and immunologic memory","Only innate cell involvement","No role for lymphocytes"], a:1, exp:"Adaptive immunity is specific and forms memory."},
+      {q:"Humoral immunity is mediated primarily by:", opts:["Cytotoxic T lymphocytes","Antibodies produced by B cells/plasma cells","Natural killer cells","Complement only"], a:1, exp:"Humoral immunity relies on antibodies."},
+      {q:"Cell‑mediated immunity primarily involves:", opts:["Antibodies neutralizing toxins","T lymphocytes acting on infected cells","Platelet aggregation","Erythrocyte oxygen transport"], a:1, exp:"Cell-mediated immunity is T-cell driven."},
+      {q:"Active acquired immunity results from:", opts:["Transfer of preformed antibodies","Host’s own response after infection or vaccination","Passive maternal IgG only","Immediate short-term protection only"], a:1, exp:"Active immunity is generated by the host."},
+
+      {q:"Passive acquired immunity is best described as:", opts:["Long-lasting memory produced by host B cells","Transfer of preformed antibodies providing immediate, temporary protection","Generation of cytotoxic T cells by vaccination","Activation of complement by PRRs"], a:1, exp:"Passive immunity provides immediate but temporary protection."},
+      {q:"Antigen presentation to naive T cells is primarily performed by:", opts:["Erythrocytes","Professional APCs (dendritic cells, macrophages, B cells)","Platelets","Smooth muscle cells"], a:1, exp:"Professional APCs present antigen to T cells."},
+      {q:"MHC class I molecules present antigen to:", opts:["CD4+ helper T cells","CD8+ cytotoxic T cells","B cells only","NK cells exclusively"], a:1, exp:"MHC I presents to CD8+ T cells."},
+      {q:"MHC class II molecules present antigen to:", opts:["CD8+ T cells","CD4+ helper T cells","Red blood cells","Neutrophils"], a:1, exp:"MHC II presents to CD4+ T cells."},
+      {q:"Clonal selection theory states that:", opts:["All lymphocytes are identical","Antigen selects and expands lymphocytes with specific receptors","Only innate cells proliferate","Antibodies are produced without B cell activation"], a:1, exp:"Antigen selects specific lymphocyte clones."},
+
+      {q:"Somatic hypermutation and affinity maturation occur in:", opts:["Bone marrow stromal cells only","Germinal centers of secondary lymphoid organs","Thymic cortex","Red pulp of spleen only"], a:1, exp:"Germinal centers are sites of affinity maturation."},
+      {q:"Class switching in B cells changes:", opts:["Antigen specificity","Antibody constant region (isotype) while retaining specificity","T‑cell receptor type","Complement proteins produced by liver"], a:1, exp:"Class switching changes antibody isotype, not specificity."},
+      {q:"T helper 1 (Th1) cells primarily promote:", opts:["IgE class switching only","Cell‑mediated immunity and macrophage activation","Immediate hypersensitivity exclusively","Platelet aggregation"], a:1, exp:"Th1 cells support cell-mediated immunity (IFN‑γ)." },
+      {q:"T helper 2 (Th2) cells are associated with:", opts:["Macrophage activation for intracellular pathogens","B‑cell help, antibody production and allergic responses","Direct killing via perforin","Complement activation only"], a:1, exp:"Th2 cells aid B cells and allergic responses."},
+      {q:"Cytotoxic T lymphocytes kill infected cells using:", opts:["Antibodies only","Perforin and granzymes or Fas–FasL","Complement MAC only","Phagocytosis"], a:1, exp:"CTLs use perforin/granzymes and Fas–FasL pathways."},
+
+      {q:"Memory B and T cells provide:", opts:["Immediate innate responses only","Faster and stronger responses on re‑exposure","Only short-term protection","No role in vaccination"], a:1, exp:"Memory cells enable rapid secondary responses."},
+      {q:"Vaccination primarily induces which type of immunity:", opts:["Passive immunity only","Active acquired immunity with memory","Innate immunity only","Immediate antibody transfer"], a:1, exp:"Vaccines induce active adaptive immunity."},
+      {q:"Maternal IgG across the placenta is an example of:", opts:["Active immunity","Natural passive immunity","Artificial active immunity","Cell‑mediated immunity"], a:1, exp:"Maternal IgG provides natural passive immunity."},
+      {q:"Monoclonal antibody therapy provides:", opts:["Active long-term immunity","Artificial passive immunity (temporary)","T‑cell memory formation","Complement deficiency correction"], a:1, exp:"Monoclonal antibodies give temporary passive protection."},
+      {q:"Which cell type initiates adaptive responses by antigen presentation:", opts:["Neutrophils only","Dendritic cells (professional APCs)","Erythrocytes","Platelets"], a:1, exp:"Dendritic cells are key APCs."},
+
+      {q:"Opsonization enhances phagocytosis by:", opts:["Coating microbes with complement fragments or antibodies","Decreasing macrophage activity","Blocking PRRs","Reducing vascular permeability"], a:0, exp:"Opsonins coat microbes to promote phagocytosis."},
+      {q:"Which complement pathway is initiated by antibody‑antigen complexes:", opts:["Alternative pathway","Classical pathway","Lectin pathway only","None"], a:1, exp:"The classical pathway is antibody-initiated."},
+      {q:"The lectin complement pathway is activated by:", opts:["Mannose-binding lectin binding microbial carbohydrates","Antibodies only","T‑cell receptors","NK cell receptors"], a:0, exp:"Lectin pathway is triggered by MBL binding."},
+      {q:"PRRs include all EXCEPT:", opts:["Toll‑like receptors (TLRs)","NOD‑like receptors (NLRs)","B‑cell receptors (BCRs)","RIG‑I‑like receptors (RLRs)"], a:2, exp:"BCRs are adaptive, not PRRs."},
+      {q:"Which cytokines mediate fever and acute‑phase response:", opts:["IL‑10 only","IL‑1 and TNF‑α among others","Insulin","Erythropoietin"], a:1, exp:"IL‑1 and TNF‑α are key pyrogens."},
+
+      {q:"Regulatory T cells (Tregs) function to:", opts:["Enhance all immune responses","Suppress immune responses and maintain tolerance","Produce antibodies","Destroy red blood cells"], a:1, exp:"Tregs suppress immunity and maintain self-tolerance."},
+      {q:"Central tolerance occurs in:", opts:["Peripheral tissues only","Primary lymphoid organs (thymus, bone marrow)","Spleen white pulp only","Lymphatic capillaries"], a:1, exp:"Central tolerance is established in primary lymphoid organs."},
+      {q:"Peripheral tolerance mechanisms include EXCEPT:", opts:["Anergy of self‑reactive lymphocytes","Suppression by Tregs","Clonal deletion in the thymus only","Immune privilege"], a:2, exp:"Clonal deletion in thymus is central, not peripheral."},
+      {q:"Which hypersensitivity is antibody‑mediated and immediate:", opts:["Type I (IgE)","Type IV (T‑cell mediated)","Type III (immune complex)","Type II (cytotoxic)"], a:0, exp:"Type I is IgE-mediated immediate hypersensitivity."},
+      {q:"Type IV hypersensitivity is mediated by:", opts:["Antibodies only","T lymphocytes (delayed type)","Complement exclusively","Platelets"], a:1, exp:"Type IV is T-cell mediated delayed hypersensitivity."},
+
+      {q:"Primary immune response is characterized by:", opts:["Faster and larger than secondary","Slower with initial IgM then IgG class switching","Memory cells abundant before exposure","No clonal expansion"], a:1, exp:"Primary response is slower with initial IgM."},
+      {q:"Secondary (anamnestic) response shows:", opts:["Slower antibody production","Rapid, high‑affinity IgG due to memory cells","No role for B cells","Only innate activation"], a:1, exp:"Secondary response is rapid and robust due to memory."},
+      {q:"Main antibody in mucosal secretions is:", opts:["IgG","IgA (secretory)","IgM only","IgE"], a:1, exp:"Secretory IgA predominates in mucosa."},
+      {q:"IgM is typically first in primary response because:", opts:["Highest affinity initially","Produced without class switching","Secreted by T cells","Not involved in complement"], a:1, exp:"IgM is produced early before class switching."},
+      {q:"Antibody functions include all EXCEPT:", opts:["Neutralization","Opsonization","Direct intracellular killing without cells or complement","Activation of classical complement"], a:2, exp:"Antibodies do not directly kill intracellularly without cells."},
+
+      {q:"Which cell helps B cells with isotype switching and affinity maturation:", opts:["CD8+ T cells","T follicular helper (Tfh) CD4+ cells","Neutrophils","Erythrocytes"], a:1, exp:"Tfh cells provide B-cell help in germinal centers."},
+      {q:"Immune memory is maintained by:", opts:["Continuous antigen only","Long‑lived plasma cells and memory lymphocytes","Red blood cells","Platelets"], a:1, exp:"Memory is maintained by long-lived plasma and memory cells."},
+      {q:"Passive immunization is most useful when:", opts:["Long-term immunity needed","Immediate protection after exposure or in immunodeficiency","It induces host memory reliably","It replaces vaccines permanently"], a:1, exp:"Passive immunization gives immediate short-term protection."},
+      {q:"Adjuvants in vaccines function to:", opts:["Directly kill pathogens","Enhance innate activation and improve adaptive responses","Suppress immune responses","Replace antigen"], a:1, exp:"Adjuvants boost innate signals to improve adaptive immunity."},
+      {q:"Relationship between innate and adaptive immunity:", opts:["Innate acts first and shapes adaptive responses","Adaptive acts first then innate","They operate independently","Only innate provides memory"], a:0, exp:"Innate immunity initiates and shapes adaptive responses."}
+    ];
+
+    let idx = 0, score = 0, attempted = 0;
+
+    const questionArea = document.getElementById('questionArea');
+    const counter = document.getElementById('counter');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const explainEl = document.getElementById('explain');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+
+    function render() {
+      const it = questions[idx];
+      counter.textContent = `Question ${idx+1} of ${questions.length}`;
+      questionArea.innerHTML = '';
+      explainEl.style.display = 'none';
+      checkBtn.disabled = false;
+      nextBtn.disabled = true;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      const q = document.createElement('div');
+      q.className = 'q';
+      q.textContent = it.q;
+      questionArea.appendChild(q);
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+      it.opts.forEach((o,i) => {
+        const d = document.createElement('div');
+        d.className = 'opt';
+        d.tabIndex = 0;
+        d.innerHTML = `<input type="radio" name="choice" value="${i}" style="pointer-events:none"> <span>${o}</span>`;
+        d.addEventListener('click', () => {
+          opts.querySelectorAll('input').forEach(inp => inp.checked = false);
+          d.querySelector('input').checked = true;
+        });
+        opts.appendChild(d);
+      });
+      questionArea.appendChild(opts);
+    }
+
+    checkBtn.addEventListener('click', () => {
+      const sel = document.querySelector('input[name="choice"]:checked');
+      if (!sel) {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Select an option.';
+        explainEl.style.display = 'block';
+        return;
+      }
+      const chosen = Number(sel.value);
+      const correct = questions[idx].a;
+      const optDivs = document.querySelectorAll('.opt');
+      optDivs.forEach((el,i) => {
+        if (i === correct) el.classList.add('correct');
+        if (el.querySelector('input').checked && i !== correct) el.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        explainEl.style.color = 'var(--accent)';
+        explainEl.textContent = 'Correct. ' + questions[idx].exp;
+        score++;
+      } else {
+        explainEl.style.color = 'var(--danger)';
+        explainEl.textContent = 'Wrong. ' + questions[idx].exp;
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      explainEl.style.display = 'block';
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        document.getElementById('quizCard').style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      document.getElementById('quizCard').style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+
+    restartBtn.addEventListener('click', restart);
+    tryAgain.addEventListener('click', restart);
+
+    render();
+  </script>
+</body>
+</html>

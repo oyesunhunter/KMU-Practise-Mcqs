@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CVS & Blood MCQ Quiz (50)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22c55e;
+      --wrong: #ef4444;
+      --primary: #38bdf8;
+    }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1220, #0f172a);
+      color: var(--text);
+    }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    header { margin-bottom: 16px; }
+    h1 { font-size: 1.7rem; margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 0.95rem; }
+    .card {
+      background: linear-gradient(180deg, #0f151f, #121824);
+      border: 1px solid #1f2937; border-radius: 14px; padding: 18px 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: var(--muted); font-size: 0.9rem; }
+    .question { font-size: 1.1rem; margin: 12px 0 8px; }
+    .options { margin: 10px 0 6px; }
+    .opt {
+      display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 10px; border: 1px solid #1f2937; margin: 8px 0;
+      background: #0b1320; cursor: pointer;
+    }
+    .opt input { margin-top: 3px; }
+    .opt.correct { border-color: #16a34a; background: #0a1a12; }
+    .opt.wrong { border-color: var(--wrong); background: #1b0d0f; }
+    .feedback { min-height: 24px; margin-top: 8px; font-weight: 600; }
+    .feedback.good { color: var(--accent); }
+    .feedback.bad { color: var(--wrong); }
+    .controls { display: flex; gap: 10px; margin-top: 10px; }
+    button {
+      border: none; border-radius: 10px; padding: 10px 14px; font-size: 0.95rem;
+      color: #0b1220; background: var(--primary); cursor: pointer; font-weight: 600;
+    }
+    button.secondary { background: #94a3b8; color: #0b1220; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .collapse {
+      margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px;
+    }
+    .coll-title {
+      color: var(--muted); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .coll-body { margin-top: 6px; display: none; color: #cbd5e1; }
+    .score {
+      margin-top: 18px; padding: 10px; border-radius: 10px; background: #0b1320; border: 1px solid #1f2937;
+    }
+    .progress {
+      height: 8px; background: #0b1320; border: 1px solid #1f2937; border-radius: 999px; overflow: hidden;
+      margin-left: 10px; flex: 1;
+    }
+    .progress > div { height: 100%; background: linear-gradient(90deg, #22c55e, #38bdf8); width: 0%; }
+    footer { margin-top: 20px; color: var(--muted); font-size: 0.9rem; }
+    .final {
+      margin-top: 20px; padding: 16px; border: 1px solid #334155; border-radius: 12px; background: #0b1320;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Cardiovascular & Blood MCQs</h1>
+      <div class="sub">One-by-one. Check → reveal correct → Next. Collapsible explanations included.</div>
+    </header>
+
+    <div class="card" id="quiz">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 50</div>
+        <div class="progress" aria-label="progress"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="qText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none;">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="final" style="display:none;">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="restartBtn2" class="secondary">Try again</button>
+    </div>
+
+    <footer>Topics covered: CVS function, arterial vs venous, pulmonary vs systemic circulation, heart structure & wall layers, cardiac muscle properties, conduction, cardiac cycle phases, and physiological changes during each phase.</footer>
+  </div>
+
+  <script>
+    const questions = [
+      // 1 CVS function
+      {q: "Primary function of the cardiovascular system (CVS) is:", options:["Digestion","Transport of gases, nutrients, and wastes","Immune cell production","Thermoregulation only"], ans:1, exp:"CVS maintains perfusion: delivering O2, nutrients, hormones and removing CO2 and wastes."},
+      // 2 Arterial vs venous
+      {q: "Arteries are best characterized by:", options:["Thin walls and valves","Carrying blood toward the heart","Thick elastic/muscular walls carrying blood away from the heart","Low-pressure reservoirs only"], ans:2, exp:"Arteries carry blood away and withstand higher pressures with thicker elastic and muscular layers."},
+      // 3 Veins
+      {q: "A key feature of veins is:", options:["No endothelium","Valves preventing backflow","Thicker media than arteries","Always carry oxygenated blood"], ans:1, exp:"Veins have valves (especially in limbs) to prevent retrograde flow under low-pressure conditions."},
+      // 4 Pulmonary vs systemic
+      {q:"Pulmonary circulation primarily:", options:["Supplies myocardium","Exchanges gases in lungs","Feeds systemic tissues","Returns lymph"], ans:1, exp:"Pulmonary circuit sends blood to lungs for O2 uptake and CO2 removal."},
+      // 5 Systemic circulation
+      {q:"Systemic circulation carries:", options:["Deoxygenated blood from right heart to lungs","Oxygenated blood from left heart to body tissues","Lymph from tissues to veins","Blood only to the liver"], ans:1, exp:"Left ventricle pumps oxygenated blood to organs; deoxygenated returns via systemic veins."},
+      // 6 Heart chambers
+      {q:"Which set correctly lists heart chambers?", options:["Left atrium, left ventricle, right atrium, right ventricle","Aorta, vena cava, atria, ventricles","Atria only","Ventricles only"], ans:0, exp:"The heart has two atria and two ventricles: right and left sides in series."},
+      // 7 Valves
+      {q:"Valve between left atrium and left ventricle:", options:["Tricuspid","Pulmonary","Mitral (bicuspid)","Aortic"], ans:2, exp:"Mitral/bicuspid valve is the left AV valve; tricuspid is the right AV valve."},
+      // 8 Layers of heart wall
+      {q:"Innermost layer lining chambers and valves:", options:["Pericardium","Epicardium","Myocardium","Endocardium"], ans:3, exp:"Endocardium is the smooth endothelial lining of chambers and valves."},
+      // 9 Myocardium
+      {q:"The contractile layer of the heart is the:", options:["Endocardium","Epicardium","Myocardium","Fibrous pericardium"], ans:2, exp:"Myocardium contains cardiomyocytes responsible for pumping."},
+      // 10 Coronary supply
+      {q:"Coronary arteries primarily supply:", options:["Endocardium only","Lungs","Myocardium","Brain"], ans:2, exp:"Coronary arteries perfuse the heart muscle itself."},
+      // 11 Conduction sequence
+      {q:"Normal conduction sequence is:", options:["AV node → SA node → Purkinje","SA node → AV node → Bundle branches → Purkinje fibers","Purkinje → SA → AV","SA → Purkinje → AV"], ans:1, exp:"Impulse originates in SA node, delays at AV node, then travels via His–Purkinje to ventricles."},
+      // 12 Automaticity
+      {q:"Automaticity refers to:", options:["Ability to contract on command","Ability to generate impulses spontaneously","Ability to conduct impulses","Ability to resist fatigue"], ans:1, exp:"Pacemaker cells depolarize without external stimuli."},
+      // 13 Excitability
+      {q:"Excitability of cardiac muscle is:", options:["Response to stretch","Ability to respond to stimuli and depolarize","Ability to shorten and do work","Ability to transmit impulses"], ans:1, exp:"Excitability = responsiveness to an adequate stimulus."},
+      // 14 Conductivity
+      {q:"Conductivity means:", options:["Impulse generation","Impulse transmission through myocardium","Force of contraction","Rhythmicity"], ans:1, exp:"Conductivity allows spread of action potentials via gap junctions and specialized pathways."},
+      // 15 Contractility
+      {q:"Contractility is best defined as:", options:["Rate of impulse formation","Force of contraction at a given preload","Ability to conduct electricity","Ability to relax"], ans:1, exp:"Inotropy reflects contraction strength independent of preload/afterload."},
+      // 16 Rhythmicity
+      {q:"Rhythmicity is:", options:["Irregular beating","Ability to maintain regular rate/pattern","AV nodal delay","Vagal tone"], ans:1, exp:"Stable pacemaker activity yields regular cyclic contractions."},
+      // 17 Systole
+      {q:"Systole corresponds to:", options:["Ventricular relaxation","Ventricular contraction and ejection","Atrial filling","Valve opening only"], ans:1, exp:"Systole includes isovolumetric contraction and ejection phases."},
+      // 18 Diastole
+      {q:"Diastole includes:", options:["Isovolumetric relaxation and ventricular filling","Only ejection","Only atrial systole","Only AV valve closure"], ans:0, exp:"After semilunar closure, ventricles relax, then fill when AV valves open."},
+      // 19 Isovolumetric contraction
+      {q:"During isovolumetric contraction:", options:["All valves closed; pressure rises at constant volume","Semilunar valves open","AV valves open","Ventricular volume increases"], ans:0, exp:"AV valves shut; semilunars not yet open; volume fixed but pressure increases."},
+      // 20 Ejection
+      {q:"Ventricular ejection starts when:", options:["Atrial pressure exceeds ventricular","Ventricular pressure exceeds aortic/pulmonary pressure","AV valves open","Isovolumetric relaxation begins"], ans:1, exp:"Semilunar valves open once ventricular pressure surpasses arterial pressure."},
+      // 21 Isovolumetric relaxation
+      {q:"Isovolumetric relaxation occurs when:", options:["Semilunar open, AV closed","Both sets closed after ejection","AV open, semilunar closed","All valves open"], ans:1, exp:"Semilunar valves just closed; AV valves not yet open; volume constant while pressure falls."},
+      // 22 Atrial systole
+      {q:"Atrial systole contributes:", options:["Most of stroke volume","Final 10–20% of ventricular filling (atrial kick)","Valve closure","Coronary perfusion only"], ans:1, exp:"Atrial contraction tops up end-diastolic volume, especially important in tachycardia."},
+      // 23 Heart sounds S1
+      {q:"First heart sound (S1) is due to:", options:["AV valve closure","Semilunar valve closure","AV valve opening","Atrial contraction"], ans:0, exp:"S1 marks closure of mitral and tricuspid at start of systole."},
+      // 24 Heart sounds S2
+      {q:"Second heart sound (S2) is due to:", options:["AV valve closure","Semilunar valve closure","AV valve opening","Atrial contraction"], ans:1, exp:"S2 marks aortic and pulmonary valve closure at end of ejection."},
+      // 25 Stroke volume
+      {q:"Stroke volume equals:", options:["EDV − ESV","HR × EDV","CO × HR","ESV − EDV"], ans:0, exp:"SV is the amount ejected per beat: end-diastolic minus end-systolic volume."},
+      // 26 Cardiac output
+      {q:"Cardiac output is:", options:["HR × SV","EDV × ESV","SV / HR","SV × systemic resistance"], ans:0, exp:"CO measures flow per minute from the ventricle."},
+      // 27 Preload
+      {q:"Preload relates to:", options:["Aortic pressure","Ventricular end-diastolic wall stress/volume","Contractility","Heart rate"], ans:1, exp:"Preload reflects ventricular filling and stretch before contraction."},
+      // 28 Afterload
+      {q:"Afterload primarily reflects:", options:["Ventricular filling","Systemic arterial pressure/resistance against ejection","Venous tone","AV nodal delay"], ans:1, exp:"Higher afterload (e.g., hypertension) increases required ejection pressure."},
+      // 29 Frank–Starling
+      {q:"Frank–Starling law states:", options:["Increased HR reduces SV","Increased preload increases stroke volume (within limits)","Increased afterload increases SV","Contractility independent of calcium"], ans:1, exp:"More stretch → better actin–myosin overlap → stronger contraction up to an optimal length."},
+      // 30 SA node
+      {q:"Primary pacemaker of the heart:", options:["AV node","SA node","Bundle of His","Purkinje fibers"], ans:1, exp:"SA node has highest intrinsic rate in normal physiology."},
+      // 31 AV node delay
+      {q:"AV nodal delay allows:", options:["Simultaneous atrial and ventricular contraction","Ventricular filling before contraction","Immediate ventricular contraction","Semilunar valve closure"], ans:1, exp:"Delay ensures atria empty into ventricles before ventricular systole."},
+      // 32 Intercalated discs
+      {q:"Intercalated discs provide:", options:["Mechanical coupling only","Electrical coupling via gap junctions and mechanical linkage","No coupling","Valve function"], ans:1, exp:"They enable rapid impulse spread and coordinated contraction."},
+      // 33 Pulmonary artery blood
+      {q:"Pulmonary arteries carry:", options:["Oxygenated blood","Deoxygenated blood to lungs","Lymph","Only plasma"], ans:1, exp:"Right ventricle pumps deoxygenated blood to lungs."},
+      // 34 Pulmonary veins blood
+      {q:"Pulmonary veins carry:", options:["Deoxygenated blood","Oxygenated blood to left atrium","Lymph","Mixed venous blood"], ans:1, exp:"Pulmonary veins return oxygenated blood to the left heart."},
+      // 35 Aortic valve opens when:
+      {q:"Aortic valve opens when:", options:["Left ventricular pressure < aortic pressure","Left ventricular pressure > aortic pressure","Left atrial pressure > LV pressure","During isovolumetric relaxation"], ans:1, exp:"Pressure gradient favors opening once LV pressure exceeds aortic pressure."},
+      // 36 Mitral valve
+      {q:"Mitral valve opens at:", options:["Start of systole","End of isovolumetric relaxation when LV pressure falls below LA pressure","During ejection","With S2"], ans:1, exp:"AV valves open when ventricular pressure drops below atrial pressure."},
+      // 37 End-diastolic volume
+      {q:"End-diastolic volume increases with:", options:["Faster filling time","Increased venous return/preload","Decreased venous return","Higher afterload"], ans:1, exp:"More venous return boosts EDV and, via Starling, SV."},
+      // 38 Venous valves
+      {q:"Venous valves are most numerous in:", options:["Thoracic veins","Abdominal veins","Lower limb veins","Coronary veins"], ans:2, exp:"Gravity challenges return; valves help in legs."},
+      // 39 Capillaries
+      {q:"Primary site of exchange in circulation:", options:["Arteries","Veins","Capillaries","Aorta"], ans:2, exp:"Thin walls and large surface area enable diffusion and filtration."},
+      // 40 Systemic pressure
+      {q:"Which has highest average pressure?", options:["Veins","Right ventricle","Pulmonary artery","Aorta"], ans:3, exp:"Systemic arterial tree, especially aorta, maintains highest pressures."},
+      // 41 Cardiac cycle start
+      {q:"Cardiac cycle conventionally starts with:", options:["Atrial systole","Isovolumetric contraction","Ventricular ejection","Isovolumetric relaxation"], ans:1, exp:"After AV valve closure, ventricles contract isovolumetrically before ejection."},
+      // 42 SV changes
+      {q:"Stroke volume decreases most with:", options:["Increased preload","Decreased afterload","Decreased contractility","Moderate bradycardia"], ans:2, exp:"Negative inotropy reduces ejection, raising ESV, lowering SV."},
+      // 43 CO changes
+      {q:"Cardiac output typically rises with:", options:["Marked tachycardia decreasing filling","Increased venous return (within limits)","Severe hypertension","Valve regurgitation"], ans:1, exp:"More preload usually augments CO by Starling mechanism."},
+      // 44 Right vs left heart
+      {q:"Right heart primarily pumps to:", options:["Systemic circulation","Pulmonary circulation","Coronary circulation","Portal circulation"], ans:1, exp:"Right ventricle feeds the lungs; left ventricle feeds systemic tissues."},
+      // 45 Wall thickness
+      {q:"Which ventricular wall is thicker?", options:["Right equals left","Left ventricle","Right ventricle","Atria"], ans:1, exp:"Left ventricle faces high systemic afterload; it is more muscular."},
+      // 46 Pericardium
+      {q:"Epicardium is synonymous with:", options:["Parietal pericardium","Visceral pericardium","Endocardium","Myocardium"], ans:1, exp:"Epicardium is the visceral layer covering the heart."},
+      // 47 Oxygen carriage
+      {q:"Oxygen is carried mainly by:", options:["Plasma dissolved O2","Hemoglobin in red blood cells","White blood cells","Platelets"], ans:1, exp:"Hb in RBCs binds O2; dissolved fraction is small."},
+      // 48 Platelets function
+      {q:"Primary role of platelets:", options:["Immune defense","Oxygen transport","Blood clotting (hemostasis)","Hormone secretion"], ans:2, exp:"Platelets adhere/aggregate and provide procoagulant surface for clotting."},
+      // 49 AV valve function
+      {q:"AV valves prevent:", options:["Forward flow during systole","Backflow from ventricles to atria during ventricular systole","Backflow from arteries into ventricles","Flow during diastole"], ans:1, exp:"Mitral and tricuspid prevent regurgitation to atria in systole."},
+      // 50 Semilunar valve function
+      {q:"Semilunar valves prevent:", options:["Atrial backflow","Ventricular filling","Backflow from aorta/pulmonary artery into ventricles during diastole","Forward flow during systole"], ans:2, exp:"Aortic and pulmonary valves close at end of ejection to prevent arterial reflux."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const restartBtn2 = document.getElementById('restartBtn2');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const progressBar = document.getElementById('progressBar');
+    const final = document.getElementById('final');
+    const finalText = document.getElementById('finalText');
+
+    function renderQuestion() {
+      const q = questions[idx];
+      qText.textContent = q.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = q.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      q.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'opt';
+        radio.value = i;
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => { radio.checked = true; });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    function showExplanation(open=true) {
+      explain.style.display = open ? 'block' : 'none';
+    }
+
+    toggleExplain.addEventListener('click', () => {
+      const isOpen = explain.style.display === 'block';
+      showExplanation(!isOpen);
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+
+      const correctIndex = questions[idx].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((l, i) => {
+        if (i === correctIndex) l.classList.add('correct');
+        const radio = l.querySelector('input');
+        if (radio.checked && i !== correctIndex) l.classList.add('wrong');
+      });
+
+      if (Number(selected.value) === correctIndex) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = `Wrong. Correct answer highlighted.`;
+        feedback.className = 'feedback bad';
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      showExplanation(true); // auto open
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        document.getElementById('quiz').style.display = 'none';
+        final.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${Math.round(score/attempted*100)}%).`;
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      document.getElementById('quiz').style.display = 'block';
+      final.style.display = 'none';
+      renderQuestion();
+    }
+
+    restartBtn.addEventListener('click', restart);
+    restartBtn2.addEventListener('click', restart);
+
+    // Initialize
+    renderQuestion();
+  </script>
+</body>
+</html>

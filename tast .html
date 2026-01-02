@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Taste & Olfaction MCQ Quiz (35)</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;background:#0f1724;color:#e6eef6;margin:20px}
+.container{max-width:900px;margin:auto}
+.card{background:#0b1220;padding:18px;border-radius:10px;border:1px solid #16202b}
+h1{color:#38bdf8;text-align:center}
+.q{font-size:1.05rem;margin:12px 0}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:#071826;padding:10px;border-radius:8px;border:1px solid #12202b;cursor:pointer}
+.opt.correct{background:#063e2a}
+.opt.wrong{background:#3b0f12}
+.controls{margin-top:12px}
+button{background:#38bdf8;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+button:disabled{opacity:0.6;cursor:not-allowed}
+.explain{margin-top:10px;color:#cbd5e1;display:none;border-top:1px dashed #12202b;padding-top:8px}
+.progress{height:8px;background:#07121a;border-radius:999px;overflow:hidden;margin-bottom:10px}
+.progress>div{height:100%;background:linear-gradient(90deg,#22c55e,#38bdf8);width:0%}
+.score{margin-top:12px;color:#9ca3af}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h1>Taste & Olfaction MCQs</h1>
+    <div class="progress"><div id="bar"></div></div>
+    <div id="qnum">Question 1 of 35</div>
+    <div class="q" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="controls">
+      <button id="check">Check</button>
+      <button id="next" disabled>Next</button>
+    </div>
+    <div class="explain" id="explain"></div>
+    <div class="score" id="score">Score: 0 / 0</div>
+  </div>
+</div>
+
+<script>
+const qs = [
+{q:"Taste buds are located in:", o:["Only on the tongue","Tongue, soft palate, pharynx, epiglottis","Only in nasal cavity","Only on gums"], a:1, e:"Taste buds occur on tongue and other oral/pharyngeal mucosa."},
+{q:"Each taste bud contains approximately:", o:["1–5 receptor cells","30–100 receptor cells","500–1000 cells","Only one cell"], a:1, e:"Taste buds contain ~30–100 gustatory receptor cells."},
+{q:"Taste receptor microvilli (taste hairs) project into the:", o:["Blood","Taste pore","Basement membrane","Salivary gland"], a:1, e:"Microvilli extend into the taste pore to contact dissolved chemicals."},
+{q:"Anterior two-thirds of tongue taste fibers travel in:", o:["Glossopharyngeal (IX)","Chorda tympani branch of facial (VII)","Vagus (X)","Trigeminal (V)"], a:1, e:"Chorda tympani (VII) carries taste from anterior 2/3."},
+{q:"Posterior one-third taste is via:", o:["Facial (VII)","Glossopharyngeal (IX)","Vagus (X)","Hypoglossal (XII)"], a:1, e:"Glossopharyngeal nerve (IX) supplies posterior tongue taste."},
+{q:"Taste fibers first synapse in the:", o:["Thalamus","Nucleus of the solitary tract (NTS)","Olfactory bulb","Cochlear nucleus"], a:1, e:"Taste afferents synapse in the NTS of the medulla."},
+{q:"Thalamic relay for taste is the:", o:["VPL","VPM","LGN","MGN"], a:1, e:"VPM nucleus relays gustatory information to cortex."},
+{q:"Primary gustatory cortex is located in the:", o:["Insula and frontal operculum","Occipital lobe","Temporal pole","Cerebellum"], a:0, e:"Insula and frontal operculum process taste perception."},
+{q:"Which taste uses GPCRs (metabotropic receptors)?", o:["Salty and sour","Sweet, bitter, and umami","All tastes use ion channels only","Only salty"], a:1, e:"Sweet, bitter and umami use GPCRs and second messengers."},
+{q:"Salty taste transduction primarily involves:", o:["H+ channels","Na+ influx through epithelial channels","Cl- channels","K+ pumps"], a:1, e:"Salty stimuli enter via Na+ channels depolarizing receptor cells."},
+{q:"Sour taste is mainly due to:", o:["Na+","H+ (acids)","Amino acids","Lipids"], a:1, e:"Acids (H+) interact with channels to produce sour sensation."},
+{q:"Umami taste detects:", o:["Sugars only","Glutamate and certain amino acids","Salts only","Fatty acids only"], a:1, e:"Umami senses L-glutamate and related amino acids (savory)."},
+
+{q:"Olfaction detects:", o:["Dissolved tastants only","Volatile odorant molecules","Sound waves","Light"], a:1, e:"Olfaction senses airborne volatile chemicals via nasal epithelium."},
+{q:"Olfactory receptor neurons are located in the:", o:["Inferior nasal meatus","Olfactory epithelium in superior nasal cavity","Nasopharynx only","Tongue"], a:1, e:"Olfactory neurons reside in the superior nasal epithelium."},
+{q:"Each olfactory receptor neuron typically expresses:", o:["Many receptor types","A single odorant receptor gene type","No receptors","Only GPCRs for taste"], a:1, e:"Each neuron usually expresses one receptor gene, enabling combinatorial coding."},
+{q:"Olfactory receptors are which class of receptor?", o:["Ion channels","G-protein coupled receptors (GPCRs)","Tyrosine kinases","Nuclear receptors"], a:1, e:"Odorant receptors are GPCRs that activate second messenger cascades."},
+{q:"Olfactory receptor axons project to the:", o:["Olfactory bulb glomeruli","Thalamus directly","Cochlear nucleus","Spinal cord"], a:0, e:"Axons converge onto glomeruli in the olfactory bulb."},
+{q:"Olfactory information reaches cortex without first synapsing in the thalamus (true/false)?", o:["True","False","Only in rodents","Only in humans"], a:0, e:"Primary olfactory projections reach cortex (piriform) directly, with parallel thalamic routing."},
+{q:"Olfactory receptor neurons are unique because they:", o:["Do not regenerate","Regenerate from basal stem cells","Are glia","Are muscle cells"], a:1, e:"Olfactory neurons regenerate throughout life from basal cells."},
+{q:"Flavor perception is strongly influenced by:", o:["Only taste","Olfaction (retronasal smell) and taste together","Only vision","Only texture"], a:1, e:"Smell (retronasal olfaction) greatly shapes flavor alongside taste."},
+{q:"Which cranial nerve carries olfactory information?", o:["CN I (olfactory nerve)","CN II","CN VII","CN IX"], a:0, e:"Olfactory nerve (CN I) transmits signals from epithelium to bulb."},
+
+{q:"Taste receptor cells release neurotransmitter onto:", o:["Afferent sensory fibers (gustatory neurons)","Motor neurons","Olfactory neurons","Hair cells"], a:0, e:"Gustatory cells synapse onto primary sensory afferents."},
+{q:"Bitter taste receptors are important for:", o:["Detecting sugars","Detecting potentially toxic compounds","Detecting umami","Detecting salt only"], a:1, e:"Bitter sensitivity helps avoid toxins."},
+{q:"Loss of smell is called:", o:["Ageusia","Anosmia","Dysgeusia","Hyperosmia"], a:1, e:"Anosmia denotes loss of olfactory function."},
+{q:"Taste disorders (ageusia) often reflect damage to which nerves?", o:["CN V only","CN VII, IX, or X depending on region","CN II","CN VIII"], a:1, e:"Taste loss depends on which gustatory nerve is affected."},
+{q:"Receptor convergence in olfactory bulb (glomeruli) supports:", o:["Single-molecule detection only","Combinatorial coding and odor discrimination","Only taste perception","Only motor reflexes"], a:1, e:"Convergence creates spatial patterns that encode odor identity."},
+{q:"Which structure integrates taste and smell for flavor perception?", o:["Insula and orbitofrontal cortex","Primary motor cortex","Cerebellum","Medulla only"], a:0, e:"Insula and orbitofrontal cortex combine gustatory and olfactory inputs for flavor."},
+{q:"Which taste modality uses direct ion channel gating by H+ or Na+?", o:["Sweet and umami","Salty and sour","Bitter only","All use GPCRs"], a:1, e:"Salty (Na+) and sour (H+) often act via ion channels."}
+];
+
+let idx=0,score=0,attempted=0;
+const qtext=document.getElementById('qtext'), opts=document.getElementById('opts'), bar=document.getElementById('bar'), qnum=document.getElementById('qnum'), explain=document.getElementById('explain'), scoreBox=document.getElementById('score');
+
+function render(){
+  const item=qs[idx];
+  qnum.textContent=`Question ${idx+1} of ${qs.length}`;
+  qtext.textContent=item.q;
+  opts.innerHTML=''; explain.style.display='none';
+  bar.style.width=`${(idx)/qs.length*100}%`;
+  item.o.forEach((opt,i)=>{
+    const d=document.createElement('div'); d.className='opt';
+    d.innerHTML=`<input type="radio" name="ch" value="${i}" style="pointer-events:none"> ${opt}`;
+    d.addEventListener('click',()=>{ opts.querySelectorAll('input').forEach(inp=>inp.checked=false); d.querySelector('input').checked=true; });
+    opts.appendChild(d);
+  });
+  document.getElementById('check').disabled=false;
+  document.getElementById('next').disabled=true;
+  scoreBox.textContent=`Score: ${score} / ${attempted}`;
+}
+document.getElementById('check').addEventListener('click',()=>{
+  const sel=opts.querySelector('input[name="ch"]:checked');
+  if(!sel){ alert('Please select an option.'); return; }
+  const chosen=Number(sel.value), correct=qs[idx].a;
+  opts.querySelectorAll('.opt').forEach((el,i)=>{ if(i===correct) el.classList.add('correct'); if(el.querySelector('input').checked && i!==correct) el.classList.add('wrong'); });
+  if(chosen===correct){ score++; alert('Correct!'); } else { alert('Wrong. Correct answer highlighted.'); }
+  attempted++; scoreBox.textContent=`Score: ${score} / ${attempted}`;
+  explain.textContent=qs[idx].e; explain.style.display='block';
+  document.getElementById('check').disabled=true; document.getElementById('next').disabled=false;
+});
+document.getElementById('next').addEventListener('click',()=>{
+  idx++; if(idx>=qs.length){ document.querySelector('.card').innerHTML=`<h1>Quiz complete</h1><p style="text-align:center">You scored ${score} out of ${attempted} (${attempted?Math.round(score/attempted*100):0}%).</p><p style="text-align:center"><button onclick="location.reload()">Try again</button></p>`; return; } render();
+});
+render();
+</script>
+</body>
+</html>

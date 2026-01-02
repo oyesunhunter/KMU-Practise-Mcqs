@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Visual Physiology Quiz — 35 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#071021; --bg2:#0f1724; --card:#0b1220; --muted:#9ca3af;
+      --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);}
+    .wrap{max-width:980px;margin:28px auto;padding:18px;}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    h1{margin:0;color:var(--primary);font-size:1.5rem;text-align:center}
+    .sub{color:var(--muted);text-align:center;font-size:0.95rem}
+    .card{background:linear-gradient(180deg,#07121a,#0b1220);border:1px solid #16202b;border-radius:12px;padding:16px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .qtext{font-size:1.05rem;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .opt input{margin:0}
+    .opt.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .opt.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .feedback{min-height:26px;margin-top:10px;font-weight:700}
+    .feedback.good{color:var(--accent)}
+    .feedback.bad{color:var(--danger)}
+    .controls{display:flex;gap:10px;margin-top:12px;align-items:center}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8;color:#041021}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .collapse{margin-top:12px;border-top:1px dashed #12202b;padding-top:10px}
+    .coll-title{color:var(--muted);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .coll-body{margin-top:8px;display:none;color:#cbd5e1;line-height:1.4}
+    .score{margin-top:14px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;color:var(--muted)}
+    .final{display:none;margin-top:18px;padding:16px;border-radius:10px;background:#071826;border:1px solid #12202b;text-align:center}
+    @media (max-width:520px){.wrap{padding:12px}.qtext{font-size:1rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Visual Physiology Quiz — 35 MCQs</h1>
+      <div class="sub">One question at a time • Click <strong>Check</strong> to reveal the correct option, then <strong>Next</strong></div>
+    </header>
+
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 35</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="qtext" id="qText"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Layers of eyeball
+      {q:"Which layer of the eyeball forms the cornea and sclera?", options:["Vascular layer","Fibrous layer","Nervous layer","Lymphatic layer"], ans:1, exp:"The fibrous layer includes the cornea (transparent) and sclera (white protective coat)."},
+      {q:"Which layer contains the iris, ciliary body and choroid?", options:["Fibrous layer","Nervous layer","Vascular (uveal) layer","Conjunctiva"], ans:2, exp:"The uvea (vascular layer) supplies blood, controls pupil size and accommodation."},
+      {q:"Which layer is the retina?", options:["Fibrous layer","Vascular layer","Nervous (inner) layer","Corneal epithelium"], ans:2, exp:"The retina is the inner nervous layer containing photoreceptors and neurons."},
+      {q:"Primary function of the cornea is:", options:["Blood supply","Refraction of light","Phototransduction","Accommodation"], ans:1, exp:"The cornea provides most of the eye's refractive power and is transparent."},
+      {q:"The choroid primarily functions to:", options:["Refract light","Absorb stray light and nourish retina","Produce aqueous humor","Control pupil size"], ans:1, exp:"Choroid is vascular and absorbs scattered light while supplying the outer retina."},
+
+      // Retina (nervous layer) physiology
+      {q:"Photoreceptors in the retina are:", options:["Rods and cones","Ganglion and bipolar cells","Horizontal and amacrine cells","Müller cells only"], ans:0, exp:"Rods (scotopic) and cones (photopic) are the primary photoreceptors."},
+      {q:"Which retinal layer contains photoreceptor cell bodies?", options:["Ganglion cell layer","Inner nuclear layer","Outer nuclear layer","Nerve fiber layer"], ans:2, exp:"Photoreceptor nuclei are located in the outer nuclear layer."},
+      {q:"Phototransduction in rods begins with:", options:["Opening of Na+ channels","Isomerization of 11-cis-retinal in rhodopsin","Release of glutamate","Action potential generation"], ans:1, exp:"Light causes 11-cis-retinal to isomerize to all-trans-retinal, activating transducin."},
+      {q:"Light exposure causes photoreceptors to:", options:["Depolarize and increase glutamate release","Hyperpolarize and reduce glutamate release","Fire action potentials","Secrete aqueous humor"], ans:1, exp:"Photoreceptor hyperpolarization reduces tonic glutamate release in light."},
+      {q:"Which retinal cells mediate lateral inhibition for contrast enhancement?", options:["Bipolar cells","Horizontal and amacrine cells","Ganglion cells only","Photoreceptors only"], ans:1, exp:"Horizontal and amacrine cells provide lateral interactions that sharpen contrast."},
+
+      // Physiology of vision (phototransduction, adaptation)
+      {q:"The enzyme activated by transducin reduces levels of:", options:["cAMP","cGMP","ATP","Glucose"], ans:1, exp:"Phosphodiesterase activated by transducin hydrolyzes cGMP, closing cGMP-gated channels."},
+      {q:"Closure of cGMP-gated Na+ channels leads to:", options:["Depolarization","Hyperpolarization","Increased transmitter release","Action potentials in photoreceptors"], ans:1, exp:"Closure reduces inward Na+ current, hyperpolarizing the photoreceptor."},
+      {q:"Dark current refers to:", options:["Ionic current in light","Tonic Na+ influx in darkness through cGMP-gated channels","Current in optic nerve only","CSF flow"], ans:1, exp:"In darkness, cGMP keeps channels open causing a steady inward current (dark current)."},
+      {q:"Dark adaptation involves:", options:["Pupil constriction only","Rhodopsin regeneration and pupil dilation","Immediate color vision","Loss of rods"], ans:1, exp:"Adaptation includes photopigment regeneration and pupil changes to increase sensitivity."},
+      {q:"Fovea centralis is specialized for:", options:["Low-light vision","High acuity and color vision","Peripheral motion detection","Aqueous humor production"], ans:1, exp:"Fovea has high cone density and minimal overlying layers for sharp central vision."},
+
+      // Visual pathway anatomy & physiology
+      {q:"Axons of retinal ganglion cells form the:", options:["Optic nerve","Oculomotor nerve","Trigeminal nerve","Facial nerve"], ans:0, exp:"Ganglion cell axons exit the eye as the optic nerve (CN II)."},
+      {q:"At the optic chiasm, which fibers cross?", options:["Temporal retinal fibers","Nasal retinal fibers","All fibers","No fibers"], ans:1, exp:"Nasal retinal fibers decussate at the chiasm, enabling binocular visual fields."},
+      {q:"After the optic chiasm, fibers continue as:", options:["Optic tracts","Optic radiations","Optic nerves","Oculomotor tracts"], ans:0, exp:"Post-chiasm fibers are called optic tracts projecting to the LGN and other targets."},
+      {q:"Primary thalamic relay for vision is the:", options:["Medial geniculate nucleus","Lateral geniculate nucleus (LGN)","Ventral posterolateral nucleus","Pulvinar only"], ans:1, exp:"LGN relays retinal signals to primary visual cortex."},
+      {q:"Fibers from LGN to primary visual cortex travel in:", options:["Corticospinal tract","Optic radiations","Medial lemniscus","Spinothalamic tract"], ans:1, exp:"Optic radiations (Meyer's loop and Baum's loop) carry visual information to V1."},
+
+      // Functional pathways and processing
+      {q:"Magnocellular pathway is specialized for:", options:["Color and fine detail","Motion and low-contrast detection","Olfaction","Pupil reflex"], ans:1, exp:"Magnocellular (M) pathway conveys motion and temporal resolution."},
+      {q:"Parvocellular pathway conveys:", options:["Motion","Color and high spatial resolution","Auditory signals","Vestibular input"], ans:1, exp:"Parvocellular (P) pathway transmits color and fine detail."},
+      {q:"Center-surround receptive fields in retina enhance:", options:["Temporal summation only","Spatial contrast and edge detection","Lens accommodation","Pupil size"], ans:1, exp:"Center-surround organization improves contrast and edge detection."},
+      {q:"Retinal ganglion cells generate:", options:["Graded potentials only","Action potentials transmitted along optic nerve","Hormonal signals","CSF flow"], ans:1, exp:"Ganglion cells fire action potentials that travel in the optic nerve."},
+      {q:"The pupillary light reflex afferent limb is via:", options:["Oculomotor nerve","Optic nerve (CN II)","Facial nerve","Trigeminal nerve"], ans:1, exp:"Light signal travels via CN II to pretectal area; efferent via CN III."},
+
+      // Clinical correlations & lesions
+      {q:"Lesion of the right optic nerve causes:", options:["Right homonymous hemianopia","Right monocular blindness","Bitemporal hemianopia","Left monocular blindness"], ans:1, exp:"Optic nerve lesion causes blindness in the ipsilateral eye."},
+      {q:"Lesion at the optic chiasm (midline) typically causes:", options:["Homonymous hemianopia","Bitemporal hemianopia","Monocular blindness","Quadrantanopia"], ans:1, exp:"Midline chiasmal lesions (e.g., pituitary) affect crossing nasal fibers producing bitemporal field loss."},
+      {q:"Lesion of right optic tract produces:", options:["Right monocular blindness","Left homonymous hemianopia","Right homonymous hemianopia","Bitemporal hemianopia"], ans:2, exp:"Optic tract lesion causes contralateral homonymous hemianopia (right tract → left field loss)."},
+      {q:"Lesion of Meyer's loop causes:", options:["Superior quadrantanopia (pie in the sky)","Inferior quadrantanopia","Monocular blindness","No visual defect"], ans:0, exp:"Meyer's loop carries superior visual field fibers; lesion causes contralateral superior quadrantanopia."},
+      {q:"Macular sparing in occipital lobe lesions occurs because:", options:["Macula has no cortical representation","Macular fibers have dual blood supply from PCA and MCA","Macula is not represented in cortex","Macula uses optic nerve only"], ans:1, exp:"Macular representation may be spared due to overlapping vascular supply."},
+
+      // Additional physiology & integration
+      {q:"Saccadic eye movements are controlled primarily by:", options:["Primary visual cortex only","Brainstem and cortical eye fields","Retina only","LGN only"], ans:1, exp:"Saccades are coordinated by brainstem centers and frontal/parietal eye fields."},
+      {q:"Adaptation to bright light involves:", options:["Only pupil constriction","Photopigment bleaching and neural adaptation plus pupil constriction","Immediate rod regeneration","Loss of cones"], ans:1, exp:"Bright adaptation includes pigment bleaching, neural adjustments, and pupil changes."},
+      {q:"Contrast sensitivity is improved by:", options:["Lateral inhibition in retina","Removing horizontal cells","Blocking LGN","Increasing CSF"], ans:0, exp:"Lateral inhibition via horizontal cells enhances contrast detection."}
+    ];
+
+    let index = 0;
+    let score = 0;
+    let attempted = 0;
+
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+    const quizCard = document.getElementById('quizCard');
+
+    function render() {
+      const item = questions[index];
+      qText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = item.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${index+1} of ${questions.length}`;
+      progressBar.style.width = `${(index)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        label.tabIndex = 0;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
+        radio.value = i;
+        radio.style.pointerEvents = 'none';
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          radio.checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if(e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    toggleExplain.addEventListener('click', () => {
+      explain.style.display = explain.style.display === 'block' ? 'none' : 'block';
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[index].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      explain.style.display = 'block';
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index++;
+      if (index >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    function restart() {
+      index = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>
