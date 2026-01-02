@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nervous System MCQ Quiz (30)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg1: #0b1220; --bg2: #0f172a; --card: #111827; --text: #e5e7eb;
+      --muted: #9ca3af; --accent: #22c55e; --wrong: #ef4444; --primary: #38bdf8;
+    }
+    body { margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2)); color: var(--text); }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    header { margin-bottom: 16px; }
+    h1 { font-size: 1.8rem; margin: 0 0 6px; color: var(--primary); text-align: center; }
+    .sub { color: var(--muted); font-size: 0.95rem; text-align: center; }
+    .card {
+      background: linear-gradient(180deg, #0f151f, #121824);
+      border: 1px solid #1f2937; border-radius: 14px; padding: 18px 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .meta { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; color: var(--muted); font-size: 0.9rem; }
+    .progress { height: 8px; background: #0b1320; border: 1px solid #1f2937; border-radius: 999px; overflow: hidden; flex: 1; }
+    .progress > div { height: 100%; background: linear-gradient(90deg, #22c55e, #38bdf8); width: 0%; }
+    .question { font-size: 1.1rem; margin: 12px 0 8px; }
+    .options { margin: 10px 0 6px; }
+    .opt {
+      display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+      border-radius: 10px; border: 1px solid #1f2937; margin: 8px 0; background: #0b1320; cursor: pointer;
+    }
+    .opt input { margin-top: 3px; }
+    .opt.correct { border-color: #16a34a; background: #0a1a12; }
+    .opt.wrong { border-color: var(--wrong); background: #1b0d0f; }
+    .feedback { min-height: 24px; margin-top: 8px; font-weight: 700; }
+    .feedback.good { color: var(--accent); }
+    .feedback.bad { color: var(--wrong); }
+    .collapse { margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px; }
+    .coll-title { color: var(--muted); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .coll-body { margin-top: 6px; display: none; color: #cbd5e1; }
+    .controls { display: flex; gap: 10px; margin-top: 10px; }
+    button {
+      border: none; border-radius: 10px; padding: 10px 14px; font-size: 0.95rem;
+      color: #0b1220; background: var(--primary); cursor: pointer; font-weight: 700;
+    }
+    button.secondary { background: #94a3b8; color: #0b1220; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .score { margin-top: 18px; padding: 10px; border-radius: 10px; background: #0b1320; border: 1px solid #1f2937; }
+    .final {
+      margin-top: 20px; padding: 16px; border: 1px solid #334155; border-radius: 12px; background: #0b1320; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Nervous System MCQ Quiz</h1>
+      <div class="sub">30 questions • One-by-one • Check → reveal correct → Next • Collapsible explanations</div>
+    </header>
+
+    <div class="card" id="quiz">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 30</div>
+        <div class="progress" aria-label="progress"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="question" id="qText"></div>
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none;">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="final">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="restartBtn2" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Overview & divisions
+      {q:"Primary function of the nervous system:",options:["Digestion","Communication and control","Blood transport","Bone support"],ans:1,exp:"It senses the environment, integrates information, and coordinates responses."},
+      {q:"Anatomical divisions of the nervous system:",options:["Somatic & autonomic","CNS & PNS","Sympathetic & parasympathetic","Enteric & somatic"],ans:1,exp:"Anatomically: central (brain, spinal cord) and peripheral (nerves, ganglia)."},
+      {q:"Physiological divisions include:",options:["CNS & PNS","Somatic & autonomic","Cerebrum & cerebellum","Sympathetic & CNS"],ans:1,exp:"Somatic (voluntary) and autonomic (involuntary: sympathetic, parasympathetic, enteric)."},
+      {q:"Autonomic nervous system components:",options:["Somatic & motor","Sympathetic & parasympathetic (plus enteric)","CNS & PNS","Motor & sensory"],ans:1,exp:"ANS controls involuntary functions via sympathetic, parasympathetic, and enteric networks."},
+      {q:"Somatic nervous system primarily controls:",options:["Smooth muscle","Cardiac muscle","Skeletal muscle","Glands"],ans:2,exp:"Somatic division mediates voluntary control of skeletal muscles."},
+
+      // CNS structure/function
+      {q:"CNS consists of:",options:["Brain & spinal cord","Cranial nerves","Spinal nerves","Ganglia"],ans:0,exp:"Central nervous system = brain and spinal cord."},
+      {q:"Primary role of the CNS:",options:["Conduct impulses only","Integrate and process information","Produce hormones","Transport oxygen"],ans:1,exp:"CNS integrates sensory input and orchestrates motor and autonomic output."},
+      {q:"Cerebellum is mainly responsible for:",options:["Memory & language","Coordination and balance","Vision processing","CSF production"],ans:1,exp:"It fine-tunes motor activity, balance, and posture."},
+      {q:"Brainstem includes:",options:["Thalamus & hypothalamus","Medulla, pons, midbrain","Basal nuclei","Cerebellum only"],ans:1,exp:"Brainstem houses vital centers for breathing, heart rate, and reflexes."},
+      {q:"Spinal cord functions include:",options:["Endocrine regulation","Reflex integration and signal conduction","Blood filtration","Lymph drainage"],ans:1,exp:"It conducts signals to/from brain and mediates reflexes."},
+
+      // PNS structure/function
+      {q:"PNS includes:",options:["Brain & spinal cord","Cranial and spinal nerves","Cerebrum & cerebellum","Meninges"],ans:1,exp:"All neural structures outside CNS: nerves and ganglia."},
+      {q:"Ganglia are:",options:["Axon terminals","Clusters of neuron cell bodies in PNS","Glial cells only","CSF spaces"],ans:1,exp:"Ganglia house peripheral neuron somata (e.g., dorsal root ganglia)."},
+      {q:"Primary role of the PNS:",options:["Integration only","Relay sensory input to CNS and carry motor output to effectors","CSF regulation","Bone movement"],ans:1,exp:"PNS links the body with the CNS for input/output."},
+      {q:"Cranial nerves arise from:",options:["Spinal cord only","Brain and brainstem","Cerebellum only","Dura mater"],ans:1,exp:"Most emerge from the brainstem; some from cerebrum."},
+      {q:"Spinal nerves are typically:",options:["Pure motor","Pure sensory","Mixed (sensory and motor)","Only autonomic"],ans:2,exp:"They carry both afferent and efferent fibers."},
+
+      // Neuron definition & structure
+      {q:"A neuron is:",options:["Connective tissue cell","Functional unit of nervous system","Muscle fiber","Endothelial cell"],ans:1,exp:"Neurons generate and transmit action potentials."},
+      {q:"Dendrites primarily:",options:["Conduct impulses away","Receive synaptic inputs","Produce CSF","Form myelin"],ans:1,exp:"Dendrites are receptive processes of neurons."},
+      {q:"Axon primarily:",options:["Receives inputs","Conducts impulses away from soma","Stores neurotransmitters only","Produces hormones"],ans:1,exp:"Axons propagate action potentials to terminals."},
+      {q:"Axon hillock is:",options:["Myelin source","AP initiation zone","CSF production site","Synaptic cleft"],ans:1,exp:"It integrates inputs; threshold triggers action potential."},
+      {q:"A synapse is:",options:["Cell body","Signal transfer junction","Myelin segment","Node"],ans:1,exp:"Chemical or electrical junction between neurons or neurons and effectors."},
+
+      // Neuron classification
+      {q:"Multipolar neurons have:",options:["One axon and many dendrites","Two axons","No dendrites","Only soma"],ans:0,exp:"Most CNS neurons are multipolar."},
+      {q:"Bipolar neurons are commonly found in:",options:["Skin","Retina/olfactory epithelium","Liver","Bone"],ans:1,exp:"Special sensory pathways often use bipolar neurons."},
+      {q:"Pseudounipolar neurons are typical of:",options:["Motor neurons","Dorsal root ganglion sensory neurons","Interneurons","Glia"],ans:1,exp:"DRG neurons have a single process that bifurcates."},
+      {q:"Functional types of neurons include:",options:["Endothelial, epithelial","Motor, sensory, interneurons","Erythrocytes","Osteocytes"],ans:1,exp:"Common functional classification in neuroanatomy."},
+      {q:"Interneurons are primarily located in:",options:["PNS","CNS","Muscles","Glands"],ans:1,exp:"They integrate information within CNS circuits."},
+
+      // Nerve fiber classification & conduction
+      {q:"Myelinated fibers conduct impulses:",options:["Slowly","Rapidly (saltatory)","Not at all","Only in PNS"],ans:1,exp:"Saltatory conduction via nodes accelerates AP propagation."},
+      {q:"A fibers compared to C fibers are:",options:["Slower, smaller, unmyelinated","Faster, larger, myelinated","Equal speed","Only autonomic"],ans:1,exp:"A fibers: fast, myelinated; C fibers: slow, unmyelinated."},
+      {q:"B fibers are:",options:["Somatic motor","Preganglionic autonomic, small myelinated","Pain fibers unmyelinated","Visual fibers"],ans:1,exp:"B fibers conduct autonomic preganglionic signals."},
+      {q:"Conduction velocity depends MOST on:",options:["Neuron color","Fiber diameter and myelination","Blood type","CSF pH"],ans:1,exp:"Larger diameter and myelin increase speed."},
+      {q:"Nodes of Ranvier allow:",options:["CSF production","AP regeneration for saltatory conduction","Myelin synthesis","Synapse formation"],ans:1,exp:"Action potentials 'jump' node to node along myelinated axons."},
+
+      // Meninges & CSF
+      {q:"Order of meninges from outer to inner:",options:["Pia → arachnoid → dura","Dura → arachnoid → pia","Arachnoid → pia → dura","Dura → pia → arachnoid"],ans:1,exp:"Dura (outer), arachnoid (middle), pia (inner)."},
+      {q:"Pia mater adheres to:",options:["Skull","Surface of brain and spinal cord","Dura only","Peripheral nerves"],ans:1,exp:"Pia is the delicate membrane investing CNS surface."},
+      {q:"Arachnoid mater is:",options:["Tough fibrous","Web-like and avascular","Bone-like","Thick muscle"],ans:1,exp:"Arachnoid forms web-like trabeculae over CNS."},
+      {q:"Subarachnoid space contains:",options:["Blood","CSF and major vessels","Air","Fat"],ans:1,exp:"CSF circulates in the subarachnoid space with cerebral vessels."},
+      {q:"CSF is produced primarily by:",options:["Astrocytes","Choroid plexus","Oligodendrocytes","Microglia"],ans:1,exp:"Specialized ependymal cells of the choroid plexus secrete CSF."}
+    ];
+
+    let idx = 0;
+    let score = 0;
+    let attempted = 0;
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const restartBtn2 = document.getElementById('restartBtn2');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const progressBar = document.getElementById('progressBar');
+    const final = document.getElementById('final');
+    const finalText = document.getElementById('finalText');
+
+    function renderQuestion() {
+      const q = questions[idx];
+      qText.textContent = q.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = q.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${idx+1} of ${questions.length}`;
+      progressBar.style.width = `${(idx)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      q.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'opt';
+        radio.value = i;
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => { radio.checked = true; });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    function showExplanation(open=true) {
+      explain.style.display = open ? 'block' : 'none';
+    }
+    toggleExplain.addEventListener('click', () => {
+      const isOpen = explain.style.display === 'block';
+      showExplanation(!isOpen);
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+
+      const correctIndex = questions[idx].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((l, i) => {
+        if (i === correctIndex) l.classList.add('correct');
+        const radio = l.querySelector('input');
+        if (radio.checked && i !== correctIndex) l.classList.add('wrong');
+      });
+
+      if (Number(selected.value) === correctIndex) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      showExplanation(true);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      idx++;
+      if (idx >= questions.length) {
+        document.getElementById('quiz').style.display = 'none';
+        final.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      renderQuestion();
+    });
+
+    function restart() {
+      idx = 0; score = 0; attempted = 0;
+      document.getElementById('quiz').style.display = 'block';
+      final.style.display = 'none';
+      renderQuestion();
+    }
+
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (restartBtn2) restartBtn2.addEventListener('click', restart);
+
+    // Initialize
+    renderQuestion();
+  </script>
+</body>
+</html>
