@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Neurotransmitters, Neuromodulators & Reflexes — 36 MCQs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#071021; --bg2:#0f1724; --card:#0b1220; --muted:#9ca3af;
+      --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);}
+    .wrap{max-width:920px;margin:36px auto;padding:20px;}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    h1{margin:0;color:var(--primary);font-size:1.6rem;text-align:center}
+    .sub{color:var(--muted);text-align:center;font-size:0.95rem}
+    .card{background:linear-gradient(180deg,#07121a,#0b1220);border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .qtext{font-size:1.05rem;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .opt input{margin:0}
+    .opt.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .opt.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .feedback{min-height:26px;margin-top:10px;font-weight:700}
+    .feedback.good{color:var(--accent)}
+    .feedback.bad{color:var(--danger)}
+    .controls{display:flex;gap:10px;margin-top:12px;align-items:center}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8;color:#041021}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .collapse{margin-top:12px;border-top:1px dashed #12202b;padding-top:10px}
+    .coll-title{color:var(--muted);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .coll-body{margin-top:8px;display:none;color:#cbd5e1;line-height:1.4}
+    .score{margin-top:14px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;color:var(--muted)}
+    .final{display:none;margin-top:18px;padding:16px;border-radius:10px;background:#071826;border:1px solid #12202b;text-align:center}
+    @media (max-width:520px){.wrap{padding:12px}.qtext{font-size:1rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Neurotransmitters, Neuromodulators & Reflexes — 36 MCQs</h1>
+      <div class="sub">One question at a time • Click <strong>Check</strong> to reveal the correct option, then <strong>Next</strong></div>
+    </header>
+
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 36</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="qtext" id="qText"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Classification of neurotransmitters
+      {q:"Neurotransmitters are commonly classified by:", options:["Chemical structure and function","Only by size","Only by location","Only by color"], ans:0, exp:"Classification often uses chemical structure (amines, amino acids, peptides) and functional action (excitatory/inhibitory)."},
+      {q:"Which group includes acetylcholine?", options:["Amino acids","Biogenic amines","Peptides","Purines"], ans:1, exp:"Acetylcholine is often grouped separately but functionally considered a small-molecule transmitter; biogenic amines include dopamine, norepinephrine, serotonin."},
+      {q:"Which neurotransmitter is an amino acid?", options:["Dopamine","Glutamate","Acetylcholine","Substance P"], ans:1, exp:"Glutamate is an excitatory amino acid neurotransmitter."},
+      {q:"GABA is primarily:", options:["Excitatory","Inhibitory","A peptide","A lipid"], ans:1, exp:"GABA (gamma-aminobutyric acid) is the main inhibitory neurotransmitter in the adult brain."},
+      {q:"Glycine acts mainly as:", options:["Excitatory transmitter in cortex","Inhibitory transmitter in spinal cord","Hormone","Neuromodulator only"], ans:1, exp:"Glycine is an inhibitory neurotransmitter in the spinal cord and brainstem."},
+      {q:"Dopamine belongs to which chemical class?", options:["Amino acid","Biogenic amine (catecholamine)","Peptide","Purine"], ans:1, exp:"Dopamine is a catecholamine, a type of biogenic amine."},
+      {q:"Serotonin (5-HT) is derived from:", options:["Tyrosine","Tryptophan","Glutamate","Choline"], ans:1, exp:"Serotonin is synthesized from the amino acid tryptophan."},
+      {q:"Norepinephrine is primarily associated with:", options:["Parasympathetic activity","Sympathetic arousal and attention","Digestive enzymes","CSF production"], ans:1, exp:"Norepinephrine (noradrenaline) mediates arousal, attention, and sympathetic responses."},
+      {q:"Acetylcholine acts at:", options:["Neuromuscular junction and many CNS synapses","Only in the liver","Only in the heart","Only in sensory neurons"], ans:0, exp:"ACh is the transmitter at neuromuscular junctions and many autonomic and CNS synapses."},
+      {q:"Peptide neurotransmitters include:", options:["Substance P and endorphins","GABA and glycine","Dopamine and norepinephrine","Acetylcholine only"], ans:0, exp:"Neuropeptides like Substance P, enkephalins, and endorphins act as transmitters/modulators."},
+
+      // More classification & properties
+      {q:"Purines acting as neurotransmitters include:", options:["ATP and adenosine","Dopamine and serotonin","GABA and glycine","Substance P and neuropeptide Y"], ans:0, exp:"ATP and adenosine can act as purinergic neurotransmitters/modulators."},
+      {q:"Nitric oxide (NO) is unusual because it:", options:["Is stored in vesicles","Is a gaseous diffusible transmitter","Is a peptide","Is a lipid"], ans:1, exp:"NO is a gaseous transmitter that diffuses across membranes and is not stored in vesicles."},
+      {q:"Which transmitter is excitatory in most CNS synapses?", options:["GABA","Glutamate","Glycine","Adenosine"], ans:1, exp:"Glutamate is the principal excitatory neurotransmitter in the CNS."},
+      {q:"Which transmitter is linked to reward and motor control?", options:["Serotonin","Dopamine","Glycine","Acetylcholine"], ans:1, exp:"Dopamine is central to reward pathways and basal ganglia motor circuits."},
+      {q:"Endocannabinoids act primarily as:", options:["Classical neurotransmitters","Retrograde neuromodulators","Ion channels","Structural proteins"], ans:1, exp:"Endocannabinoids are retrograde messengers that modulate presynaptic release."},
+      {q:"Which neurotransmitter is key in pain transmission (nociception)?", options:["Substance P","GABA","Dopamine","Adenosine"], ans:0, exp:"Substance P is involved in transmitting pain signals in the spinal cord."},
+      {q:"Which transmitter is important for sleep and mood regulation?", options:["Norepinephrine","Serotonin","Glycine","Glutamate"], ans:1, exp:"Serotonin influences mood, sleep, and many other functions."},
+      {q:"Which transmitter is rapidly removed by reuptake into presynaptic terminals?", options:["Peptides","Amino acids like glutamate","Biogenic amines like serotonin and norepinephrine","NO"], ans:2, exp:"Many biogenic amines are cleared by transporter-mediated reuptake."},
+      {q:"Monoamine oxidase (MAO) degrades:", options:["Peptides","Biogenic amines (e.g., dopamine, norepinephrine)","GABA","Glutamate"], ans:1, exp:"MAO enzymes metabolize monoamines such as dopamine and norepinephrine."},
+
+      // Neuromodulators
+      {q:"Neuromodulators differ from classical transmitters by:", options:["Always causing immediate EPSPs","Modulating the strength or probability of synaptic transmission","Being stored in larger vesicles only","Being only inhibitory"], ans:1, exp:"Neuromodulators alter synaptic efficacy, often via G-protein coupled receptors and slower signaling."},
+      {q:"Examples of neuromodulators include:", options:["Neuropeptides, monoamines, endocannabinoids","Only GABA","Only glutamate","Only acetylcholine"], ans:0, exp:"Neuropeptides, monoamines (e.g., dopamine, serotonin), and endocannabinoids can act as neuromodulators."},
+      {q:"Neuromodulators typically act via:", options:["Ionotropic receptors only","Metabotropic (G-protein coupled) receptors and second messengers","Direct electrical coupling","Structural remodeling only"], ans:1, exp:"Neuromodulators often use metabotropic receptors to change cell excitability or transmitter release."},
+      {q:"Neuromodulation can change:", options:["Synaptic strength, neuronal excitability, network dynamics","Only membrane color","Only axon length","Only CSF volume"], ans:0, exp:"Neuromodulators influence many aspects of neuronal and network function."},
+      {q:"Volume transmission refers to:", options:["Diffusion of neuromodulators through extracellular space affecting many cells","Transmission only at synaptic clefts","Only electrical synapses","Only in peripheral nerves"], ans:0, exp:"Neuromodulators can diffuse and act on distant targets beyond the synaptic cleft."},
+      {q:"Neuromodulators often have:", options:["Fast millisecond action","Slow, long-lasting effects (seconds to minutes)","No receptors","Only excitatory effects"], ans:1, exp:"Neuromodulatory effects are typically slower and longer-lasting than fast synaptic transmission."},
+
+      // Reflex activity & reflex arc
+      {q:"A reflex is best defined as:", options:["A voluntary movement","An involuntary, stereotyped response to a stimulus","A conscious sensation","A hormone release"], ans:1, exp:"Reflexes are automatic responses mediated by neural circuits."},
+      {q:"Reflex arc components include:", options:["Receptor, afferent neuron, integration center, efferent neuron, effector","Only brain and muscle","Only hormones","Only blood vessels"], ans:0, exp:"A complete reflex arc has receptor, sensory (afferent) limb, central integration, motor (efferent) limb, and effector."},
+      {q:"The integration center for a simple spinal reflex is:", options:["Cerebral cortex","Spinal cord gray matter","Liver","Peripheral nerve sheath"], ans:1, exp:"Many reflexes are integrated in the spinal cord without cortical involvement."},
+      {q:"A monosynaptic reflex arc contains:", options:["One synapse between sensory and motor neuron","Multiple interneurons","Only chemical synapses in brain","No synapses"], ans:0, exp:"Monosynaptic reflexes (e.g., stretch reflex) have a single synapse in the spinal cord."},
+      {q:"A polysynaptic reflex arc includes:", options:["One synapse only","One or more interneurons between sensory and motor neurons","No interneurons","Only endocrine signals"], ans:1, exp:"Polysynaptic reflexes involve interneurons and allow more complex responses."},
+      {q:"The stretch (myotatic) reflex primarily tests:", options:["Cerebellar function","Spinal reflex integrity and muscle spindle function","Autonomic tone","CSF pressure"], ans:1, exp:"Stretch reflex assesses muscle spindle, afferent and efferent pathways and spinal circuitry."},
+      {q:"Afferent limb of reflex arc carries:", options:["Motor commands to muscle","Sensory information to CNS","Blood to brain","Hormones to glands"], ans:1, exp:"Afferent (sensory) neurons transmit stimulus information to the integration center."},
+      {q:"Efferent limb of reflex arc carries:", options:["Sensory signals to CNS","Motor commands from CNS to effector","CSF to ventricles","Glucose to neurons"], ans:1, exp:"Efferent (motor) neurons convey the response to muscles or glands."},
+      {q:"An example of a protective polysynaptic reflex is:", options:["Knee-jerk reflex","Withdrawal (flexor) reflex from a painful stimulus","Pupillary light reflex (monosynaptic)","Tendon reflex"], ans:1, exp:"Withdrawal reflex involves interneurons and coordinates limb withdrawal from noxious stimuli."}
+    ];
+
+    // state
+    let index = 0;
+    let score = 0;
+    let attempted = 0;
+
+    // elements
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+    const quizCard = document.getElementById('quizCard');
+
+    function render() {
+      const item = questions[index];
+      qText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = item.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${index+1} of ${questions.length}`;
+      progressBar.style.width = `${(index)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        label.tabIndex = 0;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
+        radio.value = i;
+        radio.style.pointerEvents = 'none';
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => {
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          radio.checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if(e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    toggleExplain.addEventListener('click', () => {
+      explain.style.display = explain.style.display === 'block' ? 'none' : 'block';
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[index].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      explain.style.display = 'block';
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index++;
+      if (index >= questions.length) {
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    function restart() {
+      index = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Neuroglia & Synapse Quiz (35)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#071021; --bg2:#0f1724; --card:#0b1220; --muted:#9ca3af;
+      --accent:#22c55e; --primary:#38bdf8; --danger:#ef4444; --text:#e6eef6;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);}
+    .wrap{max-width:900px;margin:36px auto;padding:20px;}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    h1{margin:0;color:var(--primary);font-size:1.6rem;text-align:center}
+    .sub{color:var(--muted);text-align:center;font-size:0.95rem}
+    .card{background:linear-gradient(180deg,#07121a,#0b1220);border:1px solid #16202b;border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--muted);font-size:0.95rem}
+    .progress{flex:1;height:8px;background:#07121a;border-radius:999px;overflow:hidden;border:1px solid #12202b}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));width:0%}
+    .qtext{font-size:1.05rem;margin:12px 0}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;cursor:pointer}
+    .opt input{margin:0}
+    .opt.correct{background:#063e2a;border-color:#0b6b45;color:#dff7ea}
+    .opt.wrong{background:#3b0f12;border-color:#7f1d1d;color:#ffd6d6}
+    .feedback{min-height:26px;margin-top:10px;font-weight:700}
+    .feedback.good{color:var(--accent)}
+    .feedback.bad{color:var(--danger)}
+    .controls{display:flex;gap:10px;margin-top:12px;align-items:center}
+    button{background:var(--primary);border:none;color:#041021;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+    button.secondary{background:#94a3b8;color:#041021}
+    button:disabled{opacity:0.55;cursor:not-allowed}
+    .collapse{margin-top:12px;border-top:1px dashed #12202b;padding-top:10px}
+    .coll-title{color:var(--muted);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .coll-body{margin-top:8px;display:none;color:#cbd5e1;line-height:1.4}
+    .score{margin-top:14px;padding:10px;border-radius:8px;background:#071826;border:1px solid #12202b;color:var(--muted)}
+    .final{display:none;margin-top:18px;padding:16px;border-radius:10px;background:#071826;border:1px solid #12202b;text-align:center}
+    @media (max-width:520px){.wrap{padding:12px}.qtext{font-size:1rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Neuroglia & Synapse MCQ Quiz — 35 Questions</h1>
+      <div class="sub">One question at a time • Click <strong>Check</strong> to reveal the correct option, then <strong>Next</strong></div>
+    </header>
+
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div id="qCounter">Question 1 of 35</div>
+        <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="qtext" id="qText"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="collapse">
+        <div class="coll-title" id="toggleExplain">➤ Explanation</div>
+        <div class="coll-body" id="explain"></div>
+      </div>
+
+      <div class="controls">
+        <button id="checkBtn">Check</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="restartBtn" class="secondary" style="display:none">Restart</button>
+      </div>
+
+      <div class="score" id="scoreBox">Score: 0 / 0</div>
+    </div>
+
+    <div class="final" id="finalBox">
+      <h2>Quiz complete</h2>
+      <p id="finalText"></p>
+      <button id="tryAgain" class="secondary">Try again</button>
+    </div>
+  </div>
+
+  <script>
+    // 35 accurate MCQs on neuroglia and synapses
+    const questions = [
+      {q:"Neuroglia are:", options:["Neurons","Supportive cells of nervous system","Muscle fibers","Synapses"], ans:1, exp:"Neuroglia (glial cells) are non-neuronal cells that support, protect, and maintain neurons."},
+      {q:"Which glial cell forms myelin in the CNS?", options:["Schwann cell","Oligodendrocyte","Astrocyte","Microglia"], ans:1, exp:"Oligodendrocytes extend processes that wrap multiple CNS axons with myelin."},
+      {q:"Schwann cells are located in the:", options:["CNS","PNS","Both CNS and PNS","None"], ans:1, exp:"Schwann cells myelinate axons in the peripheral nervous system."},
+      {q:"Astrocytes primarily:", options:["Conduct impulses","Maintain blood–brain barrier and support neurons","Produce myelin in PNS","Act as immune cells"], ans:1, exp:"Astrocytes regulate extracellular ions, support the BBB, and provide metabolic support."},
+      {q:"Microglia function as:", options:["Myelin producers","Immune/phagocytic cells of CNS","CSF secretors","Synaptic vesicles"], ans:1, exp:"Microglia are resident macrophage-like cells that clear debris and mediate inflammation."},
+      {q:"Ependymal cells line:", options:["Blood vessels","Ventricles of brain and central canal of spinal cord","Synaptic clefts","Peripheral nerves"], ans:1, exp:"Ependymal cells form the epithelial lining of the ventricular system and help circulate CSF."},
+      {q:"Satellite cells are found in:", options:["CNS gray matter","PNS ganglia surrounding neuron somata","Skeletal muscle","Endoneurium"], ans:1, exp:"Satellite cells surround and support neuronal cell bodies in peripheral ganglia."},
+      {q:"Which glial cell helps regulate extracellular potassium and neurotransmitter uptake?", options:["Oligodendrocyte","Astrocyte","Schwann cell","Microglia"], ans:1, exp:"Astrocytes buffer K+ and uptake neurotransmitters like glutamate."},
+      {q:"Myelin primarily serves to:", options:["Increase synaptic delay","Increase conduction velocity along axons","Store neurotransmitters","Produce CSF"], ans:1, exp:"Myelin insulates axons and enables saltatory conduction, increasing speed."},
+      {q:"Demyelination of CNS axons (e.g., oligodendrocyte damage) is characteristic of:", options:["Parkinson disease","Multiple sclerosis","Alzheimer disease","Myasthenia gravis"], ans:1, exp:"Multiple sclerosis involves immune-mediated loss of CNS myelin."},
+      {q:"Which glial cell is the main phagocyte in the CNS?", options:["Astrocyte","Microglia","Schwann cell","Ependymal cell"], ans:1, exp:"Microglia remove pathogens, debris, and apoptotic cells."},
+      {q:"Schwann cells support axonal regeneration in the PNS by:", options:["Forming a regeneration tube and producing growth factors","Inhibiting axon growth","Producing CSF","Forming scar tissue"], ans:0, exp:"Schwann cells form bands of Büngner and secrete factors that guide regrowth."},
+      {q:"Astrocytes store small amounts of:", options:["Glycogen","Myelin","Neurotransmitters","DNA"], ans:0, exp:"Astrocytes contain glycogen that can be metabolized to support neurons."},
+      {q:"Which statement about glial cell numbers is most accurate?", options:["Neurons outnumber glia 10:1","Glia outnumber neurons roughly 1:1 to 3:1 depending on region","Glia are extremely rare","There are no glial cells in adults"], ans:1, exp:"Glial-to-neuron ratios vary by brain region; glia are abundant and essential."},
+      {q:"Which glial cell participates in synaptic pruning during development?", options:["Microglia","Oligodendrocyte","Schwann cell","Ependymal cell"], ans:0, exp:"Microglia help remove weak or unnecessary synapses during development."},
+      {q:"Oligodendrocytes differ from Schwann cells because:", options:["They myelinate multiple CNS axons each","They myelinate only one PNS axon","They are immune cells","They produce CSF"], ans:0, exp:"Each oligodendrocyte can myelinate several axon segments in the CNS."},
+      {q:"Each Schwann cell typically myelinates:", options:["Multiple CNS axons","A single segment of one PNS axon","An entire neuron","Dendrites"], ans:1, exp:"A Schwann cell wraps one segment of a single peripheral axon."},
+      {q:"Ependymal cells contribute to CSF movement using:", options:["Cilia on their apical surface","Myelin sheaths","Gap junctions only","Microvilli for absorption"], ans:0, exp:"Ciliated ependymal cells help circulate cerebrospinal fluid."},
+      {q:"Microglia originate embryologically from:", options:["Neural tube","Mesoderm / yolk-sac derived macrophage lineage","Endoderm","Surface ectoderm"], ans:1, exp:"Microglia derive from primitive macrophage precursors (mesodermal origin)."},
+      {q:"Oligodendrocyte precursor cells (OPCs) are important because they:", options:["Form the blood–brain barrier","Differentiate into oligodendrocytes for remyelination","Produce CSF","Form synapses"], ans:1, exp:"OPCs can proliferate and replace oligodendrocytes after injury."},
+
+      {q:"A synapse is:", options:["A type of glial cell","A junction where neurons communicate with other cells","A myelin sheath","A blood vessel"], ans:1, exp:"A synapse is the specialized junction for neuronal communication."},
+      {q:"Chemical synapses transmit signals via:", options:["Direct ionic current through gap junctions","Release of neurotransmitters across a synaptic cleft","Hormones in blood","Electrical cables"], ans:1, exp:"Chemical synapses use neurotransmitter release and receptor binding."},
+      {q:"Electrical synapses are mediated by:", options:["Neurotransmitter diffusion","Gap junction channels (connexons)","Myelin","Synaptic vesicles"], ans:1, exp:"Gap junctions allow direct ionic flow between cells for fast transmission."},
+      {q:"Which synapse type has minimal synaptic delay and can be bidirectional?", options:["Chemical synapse","Electrical synapse","Both equally","Neither"], ans:1, exp:"Electrical synapses transmit rapidly and can allow bidirectional current flow."},
+      {q:"Synaptic delay is primarily associated with:", options:["Electrical synapses","Chemical synapses due to transmitter release and receptor activation","Myelinated axons","Nodes of Ranvier"], ans:1, exp:"Chemical transmission involves vesicle release and receptor binding, causing delay."},
+      {q:"Summation at the postsynaptic membrane can be:", options:["Temporal or spatial","Only temporal","Only spatial","Neither"], ans:0, exp:"Temporal summation (repeated inputs) and spatial summation (multiple inputs) combine to reach threshold."},
+      {q:"Synaptic plasticity refers to:", options:["Fixed synaptic strength","Activity-dependent changes in synaptic strength","Only synaptic fatigue","Only synaptic delay"], ans:1, exp:"Plasticity underlies learning and memory by strengthening or weakening synapses."},
+      {q:"An excitatory postsynaptic potential (EPSP) is typically produced by:", options:["Opening of Na+ channels causing depolarization","Opening of Cl- channels causing hyperpolarization","K+ influx causing hyperpolarization","Removal of Ca2+"], ans:0, exp:"EPSPs usually result from Na+ influx that depolarizes the postsynaptic membrane."},
+      {q:"An inhibitory postsynaptic potential (IPSP) often involves:", options:["Na+ influx","Cl- influx or K+ efflux causing hyperpolarization","Ca2+ efflux","Glucose uptake"], ans:1, exp:"IPSPs hyperpolarize the membrane via Cl- entry or K+ exit, reducing excitability."},
+      {q:"Synaptic vesicles are located in the:", options:["Postsynaptic density","Presynaptic terminal (axon terminal)","Node of Ranvier","Myelin sheath"], ans:1, exp:"Vesicles containing neurotransmitter are stored in the presynaptic terminal."},
+      {q:"Neurotransmitter release from presynaptic terminals is triggered by:", options:["Na+ influx only","Ca2+ influx through voltage-gated channels","Cl- influx","ATP depletion"], ans:1, exp:"Depolarization opens voltage-gated Ca2+ channels; Ca2+ triggers vesicle fusion."},
+      {q:"Electrical synapses are commonly found in:", options:["Retina, some brain regions, cardiac and smooth muscle","Skeletal muscle only","Bone","Liver"], ans:0, exp:"Electrical synapses occur where rapid, synchronous activity is needed."},
+      {q:"Synaptic fatigue (depression) can result from:", options:["Excessive neurotransmitter synthesis","Depletion of readily releasable neurotransmitter vesicles","Increased myelination","Excessive CSF"], ans:1, exp:"Sustained high-frequency stimulation can deplete vesicle pools, reducing transmission."},
+      {q:"Divergence in neural circuits means:", options:["Many inputs converge on one neuron","One neuron influences many downstream neurons","No signal propagation","Only inhibitory signaling"], ans:1, exp:"Divergence amplifies a signal to multiple targets."},
+      {q:"Convergence in neural circuits means:", options:["One neuron influences many","Many neurons provide input to a single neuron","No synapses present","Only electrical synapses"], ans:1, exp:"Convergence allows integration of multiple inputs onto one neuron."},
+      {q:"Synapses are essential for:", options:["Reflexes, integration, learning and memory","Only conduction along axons","Only CSF production","Only myelination"], ans:0, exp:"Synapses enable complex processing, plasticity, and coordinated responses."}
+    ];
+
+    // state
+    let index = 0;
+    let score = 0;
+    let attempted = 0;
+
+    // elements
+    const qText = document.getElementById('qText');
+    const optionsBox = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const explain = document.getElementById('explain');
+    const toggleExplain = document.getElementById('toggleExplain');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const qCounter = document.getElementById('qCounter');
+    const scoreBox = document.getElementById('scoreBox');
+    const finalBox = document.getElementById('finalBox');
+    const finalText = document.getElementById('finalText');
+    const tryAgain = document.getElementById('tryAgain');
+    const quizCard = document.getElementById('quizCard');
+
+    // render a question
+    function render() {
+      const item = questions[index];
+      qText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      explain.textContent = item.exp;
+      explain.style.display = 'none';
+      nextBtn.disabled = true;
+      checkBtn.disabled = false;
+      qCounter.textContent = `Question ${index+1} of ${questions.length}`;
+      progressBar.style.width = `${(index)/questions.length*100}%`;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+
+      item.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.className = 'opt';
+        label.tabIndex = 0;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
+        radio.value = i;
+        radio.style.pointerEvents = 'none';
+        const span = document.createElement('span');
+        span.textContent = opt;
+        label.appendChild(radio);
+        label.appendChild(span);
+        label.addEventListener('click', () => {
+          // set checked visually and logically
+          const inputs = optionsBox.querySelectorAll('input');
+          inputs.forEach(inp => inp.checked = false);
+          radio.checked = true;
+        });
+        label.addEventListener('keypress', (e) => { if(e.key === 'Enter') label.click(); });
+        optionsBox.appendChild(label);
+      });
+    }
+
+    // toggle explanation
+    toggleExplain.addEventListener('click', () => {
+      explain.style.display = explain.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // check answer
+    checkBtn.addEventListener('click', () => {
+      const selected = optionsBox.querySelector('input[name="choice"]:checked');
+      if (!selected) {
+        feedback.textContent = 'Please select an option.';
+        feedback.className = 'feedback bad';
+        return;
+      }
+      const chosen = Number(selected.value);
+      const correct = questions[index].ans;
+      const labels = Array.from(optionsBox.querySelectorAll('.opt'));
+      labels.forEach((lab, i) => {
+        if (i === correct) lab.classList.add('correct');
+        const inp = lab.querySelector('input');
+        if (inp.checked && i !== correct) lab.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        feedback.textContent = 'Correct!';
+        feedback.className = 'feedback good';
+        score++;
+      } else {
+        feedback.textContent = 'Wrong. Correct answer highlighted.';
+        feedback.className = 'feedback bad';
+      }
+      attempted++;
+      scoreBox.textContent = `Score: ${score} / ${attempted}`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      explain.style.display = 'block';
+    });
+
+    // next question
+    nextBtn.addEventListener('click', () => {
+      index++;
+      if (index >= questions.length) {
+        // finish
+        quizCard.style.display = 'none';
+        finalBox.style.display = 'block';
+        finalText.textContent = `You scored ${score} out of ${attempted} (${attempted ? Math.round(score/attempted*100) : 0}%).`;
+        restartBtn.style.display = 'inline-block';
+        return;
+      }
+      render();
+    });
+
+    // restart
+    function restart() {
+      index = 0; score = 0; attempted = 0;
+      quizCard.style.display = 'block';
+      finalBox.style.display = 'none';
+      render();
+    }
+    if (restartBtn) restartBtn.addEventListener('click', restart);
+    if (tryAgain) tryAgain.addEventListener('click', restart);
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>
